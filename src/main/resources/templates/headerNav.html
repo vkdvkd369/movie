@@ -1,34 +1,28 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<link rel="stylesheet" href="/bootstrap-5.2.0-dist/css/bootstrap.css">
-<!-- <script src="/bootstrap-5.2.0-dist/js/bootstrap.js"></script> -->
-<script th:src="@{/bootstrap-5.2.0-dist/js/bootstrap.bundle.js}"></script><!--popper.js를 포함  -->
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
 
-<nav>
-	<div class="container-fluid">
-		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" 
-				aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-			<span class="navbar-toggler-icon"></span>
-		</button>
-		 
-		<div>
-			<ul class="nav justify-content-center nav-pills ">
-				<li class="nav-item">
-					<a class="nav-link active" aria-current="page" href="/">홈</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="/user/list/1">현재상영작</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="/seat/list/1">무제</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="/">무제</a>
-				</li>
-			</ul>			
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="/css/headerNav.css">
+
+
+</head>
+
+<body>
+	<header>
+		<div id="top">		
+			<p><a href="#"><img src="/images/icon.png" alt="홈로고"></a></p>
+			<ul id="gnb">
+			    <li><a href="#">Home</a></li>
+			    <li><a href="#">Recommend</a></li>
+			</ul>
 		</div>
-	</div>
-</nav>
+	</header>
 
-
+</body>
 </html>
