@@ -74,4 +74,20 @@ public class MoviesController {
 		/* System.out.println(movies); */
 		return "recommend/list";
 	}
+	
+	@GetMapping("OptionDetail")
+	
+	public void OptionDetail() {}
+	
+	@GetMapping("result")
+	
+	public void result() {}
+	
+	@GetMapping("similarResult")
+	
+	public void similarResult() {}
+	
+	@GetMapping("gridView")
+	
+	public void gridView() {}
 }
