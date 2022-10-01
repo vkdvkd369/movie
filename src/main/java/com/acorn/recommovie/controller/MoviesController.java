@@ -38,7 +38,7 @@ public class MoviesController {
 		}
 		model.addAttribute("allGenre", allGenre);
 		System.out.println(allGenre);
-		return "/rangeSelect";
+		return "/recommend/rangeSelect";
 	}
 	
 	@PostMapping("/rangeSelect.do")
@@ -72,6 +72,6 @@ public class MoviesController {
 		model.addAttribute("movies",movies);
 
 		/* System.out.println(movies); */
-		return "/list";
+		return "recommend/list";
 	}
 }

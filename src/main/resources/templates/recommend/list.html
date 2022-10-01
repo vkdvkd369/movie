@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>rangeSelect list</title>
+</head>
+<body>
+	<th:block th:each="movie : ${movies}">
+		<h3 th:text="${movie.movieTitle}"></h3>
+		<img th:src="${thumbStrs.get(movie.movieId)}">
+		<div>네이버 영화 코드 : [[${movie.movieCode}]]</div>
+		<div>연도 : [[${movie.movieYear}]]</div>
+		<div th:each="genre : ${movie.genres}">
+			<span>[[${genre.genreName}]]</span>
+		</div>
+		<div th:each="person : ${movie.people}">
+			<span>[[${person.personName}]]([[${person.personPosition}]])</span>
+		</div>
+	</th:block>
+
+</body>
+</html>
