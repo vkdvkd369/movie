@@ -13,8 +13,7 @@
 		<collection property="people" javaType="java.util.ArrayList" resultMap="PersonMap"/>
 	</resultMap>
 	
-	<!-- 복수의 collection(1:n 관계 객체)을 가지는 객체를 매핑할 때, 쿼리문에 join을 복수개 사용할 시 주의할 점 -->
-	<!--  -->
+
 	<resultMap type="Genre" id="GenreMap">
 		<id column="genreId" property="genreId"/>
 		<result column="genreName" property="genreName"/>
