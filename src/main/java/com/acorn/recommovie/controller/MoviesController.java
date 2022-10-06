@@ -38,14 +38,14 @@ public class MoviesController {
 		}
 		model.addAttribute("allGenre", allGenre);
 		System.out.println(allGenre);
-		return "/rangeSelect";
+		return "/recommend/rangeSelect";
 	}
 	
 	@PostMapping("/rangeSelect.do")
-	public String rangeSelect(@RequestParam String movie_title, Model model) {
+	public String rangeSelect(@RequestParam String movie_keyword, Model model) {
 		List<Movie> movies = null;
 		try {
-			movies = moviesMapper.selectMovieByTitle(movie_title);
+			movies = moviesMapper.selectMovieByTitle(movie_keyword);
 			
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -72,6 +72,22 @@ public class MoviesController {
 		model.addAttribute("movies",movies);
 
 		/* System.out.println(movies); */
-		return "/list";
+		return "recommend/list";
 	}
+	
+	@GetMapping("OptionDetail")
+	
+	public void OptionDetail() {}
+	
+	@GetMapping("result")
+	
+	public void result() {}
+	
+	@GetMapping("similarResult")
+	
+	public void similarResult() {}
+	
+	@GetMapping("gridView")
+	
+	public void gridView() {}
 }
