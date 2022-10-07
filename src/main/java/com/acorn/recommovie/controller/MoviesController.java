@@ -29,7 +29,7 @@ public class MoviesController {
 	
 	
 	
-	@GetMapping("/rangeSelect")
+	@GetMapping("rangeSelect")
 	public String rangeSelect(Model model) {
 
 		List<Genre> allGenre = null;
@@ -43,7 +43,7 @@ public class MoviesController {
 		return "recommend/rangeSelect";
 	}
 	
-	@PostMapping("/rangeSelect.do")
+	@PostMapping("rangeSelect.do")
 	public String rangeSelect(@RequestParam String movie_keyword, Model model) {
 		List<Movie> movies = null;
 		try {
