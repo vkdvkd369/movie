@@ -27,6 +27,8 @@ public class MoviesController {
 	private MoviesMapper moviesMapper;
 	
 	
+	
+	
 	@GetMapping("/rangeSelect")
 	public String rangeSelect(Model model) {
 
@@ -38,7 +40,7 @@ public class MoviesController {
 		}
 		model.addAttribute("allGenre", allGenre);
 		System.out.println(allGenre);
-		return "/recommend/rangeSelect";
+		return "recommend/rangeSelect";
 	}
 	
 	@PostMapping("/rangeSelect.do")
