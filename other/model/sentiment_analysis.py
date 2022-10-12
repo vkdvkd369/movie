@@ -67,7 +67,6 @@ else:
     grid_cv = GridSearchCV(model, param_grid=params, cv=3, scoring='accuracy', verbose=1)
     grid_cv.fit(tfidf_matrix_train, train_df['label'])
 
-
     joblib.dump(grid_cv, 'grid_cv.pkl')
     joblib.dump(model, 'model.pkl')
 print(grid_cv.best_params_, round(grid_cv.best_score_, 4))

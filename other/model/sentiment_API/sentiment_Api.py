@@ -15,9 +15,9 @@ def tw_tokenizer(text):
 # json REST Flask API
 @app.route('/sentiment/predict', methods=['POST'])
 def predict():
-    model = joblib.load('../grid_cv.pkl')
+    model = joblib.load('outputs/model.pkl')
     model = model.best_estimator_
-    tfidf_model = joblib.load('../tfidf_vect.pkl')
+    tfidf_model = joblib.load('outputs/tfidf_vect.pkl')
     review_texts = np.array(request.json['review_texts'])
     tfidf = tfidf_model.transform(review_texts)
     result = model.predict(tfidf)
@@ -25,5 +25,5 @@ def predict():
 
 
 if __name__ == '__main__':
-    app.run(port=8080)
+    app.run(port=8081)
 

@@ -3,18 +3,16 @@ import json
 import pandas as pd
 import numpy as np
 
-url = 'http://localhost:8080/sentiment/predict'
 
-seperated_review = pd.read_csv('../outputs/split0.csv', encoding='utf-8')
+url = 'http://localhost:8081/sentiment/predict'
+
+seperated_review = pd.read_csv("../../data/labeled/split3_label.csv", sep=",")
 df = seperated_review.iloc[:200]
 texts = df["document"].tolist()
 label = df["label"].tolist()
 
-data = {'review_texts': texts}
-headers = {'Content-type': 'application/json'}
-response = requests.post(url, data=json.dumps(data), headers=headers)
+data = {"review_texts": texts}
+# send post request including data
+response = requests.post(url, json=data)
 
-print("Accuracy: ", np.mean(np.array(label) == np.array(response.json())))
-
-print(response.json())
 

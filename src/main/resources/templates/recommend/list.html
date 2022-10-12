@@ -7,7 +7,7 @@
 <body>
 	<th:block th:each="movie : ${movies}">
 		<h3 th:text="${movie.movieTitle}"></h3>
-		<img th:src="${thumbStrs.get(movie.movieId)}">
+		<img th:src="${thumbURLs.get(movie.movieId)}">
 		<div>네이버 영화 코드 : [[${movie.movieCode}]]</div>
 		<div>연도 : [[${movie.movieYear}]]</div>
 		<div th:each="genre : ${movie.genres}">

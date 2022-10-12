@@ -1,11 +1,13 @@
 package com.acorn.recommovie.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import org.jsoup.*;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.client.RestTemplate;
 
 import com.acorn.recommovie.dto.Genre;
 import com.acorn.recommovie.dto.Movie;
@@ -54,28 +57,62 @@ public class MoviesController {
 		}
 		
 		// 검색된 모든 영화에 대한 썸네일 이미지URL을 가져옴
-		HashMap<Integer,String> thumbStrs = new HashMap<Integer,String>(); 
+		HashMap<Integer,String> thumbURLs = new HashMap<Integer,String>(); 
 		for (Movie movie : movies) {
 			String moviePageURL = "https://movie.naver.com/movie/bi/mi/basic.naver?code="+Integer.toString(movie.getMovieCode());
-			System.out.println(moviePageURL);
+			
 			Document page = null;
-			try {
-				page = Jsoup.connect(moviePageURL).get();
-
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			try {page = Jsoup.connect(moviePageURL).get();} catch (IOException e) {e.printStackTrace();}
+			
 			Elements thumbImg = page.select(".poster > a > img");
-			String thumbStr=thumbImg.attr("src");
-			thumbStrs.put(movie.getMovieId(), thumbStr);
+			String thumbURL=thumbImg.attr("src");
+			thumbURLs.put(movie.getMovieId(), thumbURL);
 		}
 		
-		model.addAttribute("thumbStrs", thumbStrs);
+		model.addAttribute("thumbURLs", thumbURLs);
 		model.addAttribute("movies",movies);
 
-		/* System.out.println(movies); */
+		// to resultSelect
 		return "recommend/list";
 	}
+	
+	//검색된 목록 중 선택된 영화들의 Movie DTO가 list로 넘어오도록 함
+	@PostMapping("resultSelect.do")
+	public String sentimentAnalysis(List<Movie> selectedMovies) {
+		HashMap<Movie,List<String>> movieReviews = new HashMap<Movie,List<String>>();
+		for (Movie movie : selectedMovies) {
+			String URL = "https://movie.naver.com/movie/bi/mi/point.naver?code="+Integer.toString(movie.getMovieCode());
+			Document mainPage = null;
+			try { mainPage = Jsoup.connect(URL).get(); } catch (IOException e) {e.printStackTrace();}
+			
+			List<String> reviews = new ArrayList<String>();
+			Elements aTags = mainPage.select(".paging > div > a");
+			for(Element a : aTags) {
+				Document page = null;
+				try {
+					page = Jsoup.connect(a.attr("href")).get();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				Elements spanTags = page.select(".score_reple > p > span");
+				for(Element el : spanTags) {
+					reviews.add(el.text());
+				}
+			}
+			
+			movieReviews.put(movie, reviews);
+		}
+		
+		System.out.println("Review data 수집 완료");
+		
+		RestTemplate restTemplate = new RestTemplate();
+//		restTemplate.postForObject("http://localhost:8081/sentiment/predict", list<)
+		
+		// to result
+		return null;
+	}
+	
+
 	
 	@GetMapping("OptionDetail")
 	
