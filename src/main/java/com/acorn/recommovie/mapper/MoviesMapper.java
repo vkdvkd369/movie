@@ -1,6 +1,7 @@
 package com.acorn.recommovie.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
@@ -13,3 +14,4 @@ public interface MoviesMapper {
 	 List<Movie> selectMovieByTitle(String movieTitle);
 	 List<Genre> selectAllGenre();
 }
+
