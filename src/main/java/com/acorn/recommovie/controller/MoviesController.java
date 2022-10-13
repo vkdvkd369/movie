@@ -10,6 +10,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,7 +24,7 @@ import com.acorn.recommovie.dto.Movie;
 import com.acorn.recommovie.mapper.MoviesMapper;
 
 @Controller 
-@RequestMapping("/recommend")
+@RequestMapping(value="/recommend", produces="text/plain;charset=UTF-8")
 public class MoviesController {
 
 	@Autowired
@@ -58,6 +59,7 @@ public class MoviesController {
 		
 		// 검색된 모든 영화에 대한 썸네일 이미지URL을 가져옴
 		HashMap<Integer,String> thumbURLs = new HashMap<Integer,String>(); 
+	
 		for (Movie movie : movies) {
 			String moviePageURL = "https://movie.naver.com/movie/bi/mi/basic.naver?code="+Integer.toString(movie.getMovieCode());
 			
@@ -75,41 +77,50 @@ public class MoviesController {
 		// to resultSelect
 		return "recommend/list";
 	}
+
+	@GetMapping("resultSelect")
+	public void resultSelect() {}
 	
 	//검색된 목록 중 선택된 영화들의 Movie DTO가 list로 넘어오도록 함
 	@PostMapping("resultSelect.do")
-	public String sentimentAnalysis(List<Movie> selectedMovies) {
-		HashMap<Movie,List<String>> movieReviews = new HashMap<Movie,List<String>>();
+	public String sentimentAnalysis(/* List<Movie> selectedMovies */) {
+
+		// test mapping
+		List<Movie> selectedMovies = moviesMapper.selectMovieByTitle("포켓몬");
+
+		HashMap<Integer,List<String>> movieReviews = new HashMap<Integer,List<String>>();
 		for (Movie movie : selectedMovies) {
-			String URL = "https://movie.naver.com/movie/bi/mi/point.naver?code="+Integer.toString(movie.getMovieCode());
+			String URL = "https://movie.naver.com/movie/point/af/list.naver?st=mcode&sword="+Integer.toString(movie.getMovieCode())+"&target=after";
 			Document mainPage = null;
 			try { mainPage = Jsoup.connect(URL).get(); } catch (IOException e) {e.printStackTrace();}
 			
+			int reviewNum = Integer.parseInt(mainPage.select(".c_88").text());
 			List<String> reviews = new ArrayList<String>();
-			Elements aTags = mainPage.select(".paging > div > a");
-			for(Element a : aTags) {
+			String pageURL = URL+"&page=";
+			for(int i = 1; i <= reviewNum/10; i++) {
 				Document page = null;
-				try {
-					page = Jsoup.connect(a.attr("href")).get();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-				Elements spanTags = page.select(".score_reple > p > span");
-				for(Element el : spanTags) {
-					reviews.add(el.text());
+				try { page = Jsoup.connect(pageURL+Integer.toString(i)).get(); } catch (IOException e) {e.printStackTrace();}
+				Elements reviewElements = page.select(".title");
+				for (Element reviewElement : reviewElements) {
+					String review = reviewElement.ownText();
+					reviews.add(review);
 				}
 			}
 			
-			movieReviews.put(movie, reviews);
+			movieReviews.put(movie.getMovieId(), reviews);
 		}
 		
 		System.out.println("Review data 수집 완료");
+
 		
 		RestTemplate restTemplate = new RestTemplate();
-//		restTemplate.postForObject("http://localhost:8081/sentiment/predict", list<)
+		String apiURL ="http://localhost:8081/sentiment/predict";
+		// make ResponseEntity List of string
+		ResponseEntity<Boolean[]> response = restTemplate.postForEntity(apiURL, movieReviews, Boolean[].class);
 		
-		// to result
-		return null;
+		
+		return "recommend/result";
+
 	}
 	
 

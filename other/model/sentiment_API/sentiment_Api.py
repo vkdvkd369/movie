@@ -18,7 +18,11 @@ def predict():
     model = joblib.load('outputs/model.pkl')
     model = model.best_estimator_
     tfidf_model = joblib.load('outputs/tfidf_vect.pkl')
-    review_texts = np.array(request.json['review_texts'])
+    # get HashMap<Integer,List<String>> data from request
+    data = request.get_json()
+    # get List<String> data from HashMap<Integer,List<String>>
+    print(data)
+    
     tfidf = tfidf_model.transform(review_texts)
     result = model.predict(tfidf)
     return jsonify(result.tolist())
