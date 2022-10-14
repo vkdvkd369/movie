@@ -235,16 +235,6 @@ function genInputValue(){
 	alert('상영중=' + valueByAir + "\n" + '장르=' + valueByGen + "\n" + 
 			'영화인=' + valueByPe + "\n" + '영화 키워드=' + valueByKey);
 		
-	// 검색 페이지
-	<c:url var="getSearchListURL" value="/search/getSearchList">
-	</c:url>
-	$(document).on('click', '#btn-search', function(e){
-		e.preventDefault();
-		var url = "${getSearchList}/";		
-		url = url + "&searchKey=" + $('#searchKey').val();
-		location.href = url;
-		console.log(url);
-	});
 			
 }
 
