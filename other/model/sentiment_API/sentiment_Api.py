@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
-import joblib
-import numpy as np
 from konlpy.tag import Okt
+import json
+import joblib
 
 app = Flask(__name__)
 
@@ -15,17 +15,25 @@ def tw_tokenizer(text):
 # json REST Flask API
 @app.route('/sentiment/predict', methods=['POST'])
 def predict():
-    model = joblib.load('outputs/model.pkl')
+
+    model = joblib.load("../outputs/grid_cv.pkl")
     model = model.best_estimator_
-    tfidf_model = joblib.load('outputs/tfidf_vect.pkl')
-    # get HashMap<Integer,List<String>> data from request
+
+    tfidf_model = joblib.load("../outputs/tfidf_vect.pkl")
+    #get map data from spring request
     data = request.get_json()
-    # get List<String> data from HashMap<Integer,List<String>>
-    print(data)
-    
-    tfidf = tfidf_model.transform(review_texts)
-    result = model.predict(tfidf)
-    return jsonify(result.tolist())
+
+    result = {}
+    for movieId, reviews in data.items():
+        if len(reviews) > 0:
+            tfidf = tfidf_model.transform(reviews)
+            predict_result = model.predict(tfidf)
+            positiveRatio = sum(predict_result) / len(predict_result)
+            result[movieId] = positiveRatio
+        else:
+            result[movieId] = None
+    print(result)
+    return result
 
 
 if __name__ == '__main__':

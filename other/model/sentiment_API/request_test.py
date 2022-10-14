@@ -1,7 +1,5 @@
 import requests
-import json
 import pandas as pd
-import numpy as np
 
 
 url = 'http://localhost:8081/sentiment/predict'
@@ -14,5 +12,6 @@ label = df["label"].tolist()
 data = {"review_texts": texts}
 # send post request including data
 response = requests.post(url, json=data)
+print(response.json())
 
 

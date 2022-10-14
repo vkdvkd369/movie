@@ -4,7 +4,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
+import java.util.Map;
+import com.google.gson.Gson;
 import org.jsoup.*;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -18,7 +19,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
-
 import com.acorn.recommovie.dto.Genre;
 import com.acorn.recommovie.dto.Movie;
 import com.acorn.recommovie.mapper.MoviesMapper;
@@ -83,12 +83,11 @@ public class MoviesController {
 	
 	//검색된 목록 중 선택된 영화들의 Movie DTO가 list로 넘어오도록 함
 	@PostMapping("resultSelect.do")
-	public String sentimentAnalysis(/* List<Movie> selectedMovies */) {
-
+	public String sentimentAnalysis(List<Movie> selectedMovies, Model model) {
 		// test mapping
-		List<Movie> selectedMovies = moviesMapper.selectMovieByTitle("포켓몬");
+		//List<Movie> selectedMovies = moviesMapper.selectMovieByTitle("포켓몬");
 
-		HashMap<Integer,List<String>> movieReviews = new HashMap<Integer,List<String>>();
+		HashMap<Integer,Object> movieReviews = new HashMap<>();
 		for (Movie movie : selectedMovies) {
 			String URL = "https://movie.naver.com/movie/point/af/list.naver?st=mcode&sword="+Integer.toString(movie.getMovieCode())+"&target=after";
 			Document mainPage = null;
@@ -112,13 +111,22 @@ public class MoviesController {
 		
 		System.out.println("Review data 수집 완료");
 
-		
+		System.out.println("수집된 영화 개수 :"+movieReviews.size());
+
 		RestTemplate restTemplate = new RestTemplate();
 		String apiURL ="http://localhost:8081/sentiment/predict";
-		// make ResponseEntity List of string
-		ResponseEntity<Boolean[]> response = restTemplate.postForEntity(apiURL, movieReviews, Boolean[].class);
 		
+		//post request to sentiment analysis server
+		ResponseEntity<String> response = restTemplate.postForEntity(apiURL, movieReviews, String.class);
+		String result = response.getBody();
 		
+		Gson gson = new Gson();
+		Map<String, Object> resultMap = gson.fromJson(result, Map.class);
+		
+		System.out.println("감성분석 결과 수신 완료");
+		System.out.println(resultMap);
+
+		model.addAttribute("resultMap", resultMap);
 		return "recommend/result";
 
 	}
