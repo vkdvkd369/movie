@@ -13,3 +13,4 @@ public interface MoviesMapper {
 	 List<Movie> selectMovieByTitle(String movieTitle);
 	 List<Genre> selectAllGenre();
 }
+

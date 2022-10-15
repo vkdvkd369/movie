@@ -2,6 +2,7 @@ import requests
 import pandas as pd
 
 
+
 url = 'http://localhost:8081/sentiment/predict'
 
 seperated_review = pd.read_csv("../../data/labeled/split3_label.csv", sep=",")
