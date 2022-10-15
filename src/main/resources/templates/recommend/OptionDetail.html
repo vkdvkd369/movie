@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+    
+	<link rel="stylesheet" href="/css/optionDetail.css">
+    <link rel="stylesheet" href="/css/headerNav.css">
+    <title>Document</title>
+</head>
+<body>
+    <header th:insert="/headerNav"></header>
+	<div class="wrapper">
+		<div class="links">
+			<ul>
+				<li data-view="list-view" class="li-list active">
+				리스트 뷰</li>
+				<li data-view="grid-view" class="li-grid">
+				그리드 뷰</li>
+			</ul>
+			<!-- 아래버튼 -->
+			<a style="display:scroll; position:absolute; right: 1px; top: 50px; " href="#scrollbottom" title=Down>
+				
+				<p style="size: 10px; width: 40px; height: 40px; padding:10px 0px 0px 12px; background:#333; color:#fff; border-radius: 3px;">
+					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down" viewBox="0 0 16 16">
+					<path d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z"/>
+				  </svg></p></a>
+		</div>
+		<div class="lists">
+			<ul class="tab-wrap">
+				<li data-view="search" class="li-search">
+					검색목록
+				</li>
+				<li data-view="selected" class="li-selected">
+					선택됨
+				</li>
+
+			</ul>
+
+
+		</div>
+	
+	<div class="view_main">
+		<div class="view_wrap list-view" style="display: block;">
+			<ul class="ul1">
+				<li>
+					<a class="list-box">
+						<!-- 영화1 -->
+						<div class="view_item">
+							<span></span><span></span><span></span><span></span>
+							<div class="vi_left">
+								<img src="/images/4.jpg" alt="4">
+							</div>
+							<div class="vi_right">
+								<p class="title">이터널 선샤인</p>
+								<p class="content">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aperiam impedit, veniam! Voluptate a impedit animi!</p>
+								<div class="add">View More</div>
+						</div>
+					</div>
+					</a>
+				</li>
+				<li>
+					<a class="list-box">
+						<!-- 영화2 -->
+						<div class="view_item">
+							<span></span><span></span><span></span><span></span>
+							<div class="vi_left">
+								<img src="/images/4.jpg" alt="4">
+							</div>
+							<div class="vi_right">
+								<p class="title">이터널 선샤인</p>
+								<p class="content">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aperiam impedit, veniam! Voluptate a impedit animi!</p>
+								<div class="add">View More</div>
+							</div>
+						</div>
+					</a>
+				</li>
+				<li>
+					<a class="list-box">
+						<!-- 영화3 -->
+						<div class="view_item">
+							<span></span><span></span><span></span><span></span>
+							<div class="vi_left">
+								<img src="/images/4.jpg" alt="2">
+							</div>
+							<div class="vi_right">
+								<p class="title">귀멸의 칼날</p>
+								<p class="content">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aperiam impedit, veniam! Voluptate a impedit animi!</p>
+								<div class="add">View More</div>
+							</div>
+						</div>
+					</a>
+				</li>
+				<li>
+					<a class="list-box">
+						<!-- 영화4 -->
+						<div class="view_item">
+							<span></span><span></span><span></span><span></span>
+							<div class="vi_left">
+								<img src="/images/4.jpg" alt="4">
+							</div>
+							<div class="vi_right">
+								<p class="title">이터널 선샤인</p>
+								<p class="content">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aperiam impedit, veniam! Voluptate a impedit animi!</p>
+							<div class="add">View More</div>
+						</div>
+					</div>
+					</a>
+				</li>
+				<li>
+					<a class="list-box">
+						<!-- 영화5 -->
+						<div class="view_item">
+							<span></span><span></span><span></span><span></span>
+							<div class="vi_left">
+								<img src="/images/4.jpg" alt="4">
+							</div>
+							<div class="vi_right">
+								<p class="title">이터널 선샤인</p>
+								<p class="content">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aperiam impedit, veniam! Voluptate a impedit animi!</p>
+								<div class="add">View More</div>
+							</div>
+						</div>
+					</a>
+				</li>
+				<li>
+					<a class="list-box">
+						<!-- 영화6 -->
+						<div class="view_item">
+							<span></span><span></span><span></span><span></span>
+							<div class="vi_left">
+								<img src="/images/4.jpg" alt="4">
+							</div>
+							<div class="vi_right">
+								<p class="title">이터널 선샤인</p>
+								<p class="content">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aperiam impedit, veniam! Voluptate a impedit animi!</p>
+								<div class="add">View More</div>
+							</div>
+						</div>
+					</a>
+				</li>
+				<li>
+					<a class="list-box">
+						<!-- 영화7 -->
+						<div class="view_item">
+							<span></span><span></span><span></span><span></span>
+							<div class="vi_left">
+								<img src="/images/4.jpg" alt="4">
+							</div>
+							<div class="vi_right">
+								<p class="title">이터널 선샤인</p>
+								<p class="content">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aperiam impedit, veniam! Voluptate a impedit animi!</p>
+								<div class="add">View More</div>  
+							</div>
+						</div>
+					</a>
+				</li>
+			</ul>
+		</div>
+	</div>	
+	
+	<script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
+    <script>
+    $(document).ready(function () {
+        // 변수 선언
+        var $add = $('.add');
+        var $tab = $('.tab-wrap');
+
+        var idx;
+
+        $add.click(function () {
+            // index 값 증가
+            idx = $tab.find('li').length + 1;
+
+            // 20 개까지만 탭 추가 제어
+            if ( $tab.find('li').length < 20 ) {
+               // 각 element 추가
+               $tab.append('<li>Movie_' + idx + '<a>X</a></li>');
+                $con.append('<div class="content">content ' + idx + '</div>');
+               
+                // 탭 활성화
+                $tab.find('li').removeClass('active');
+                $tab.find('li').eq(idx - 1).addClass('active');
+
+                // 탭 메뉴 너비 조정
+                if ( $tab.find('li').length > 10 ) {
+                    $tab.find('li').css('width', 1520 / idx - 2 + 'px');
+                }
+            }
+        });
+
+        // 탭 클릭시 활성화
+        $tab.on('click', 'li', function () {
+            // index 변수 선언
+            idx = $(this).index();
+
+            // 탭 활성화
+            $tab.find('li').removeClass('active');
+            $(this).addClass('active');
+
+            // 콘텐츠 활성화
+        });
+
+        // 닫기 버튼 클릭시 해당 탭/콘텐츠 삭제
+        $tab.on('click', 'a', function () {
+            idx = $(this).parent().index();
+
+            // 메뉴와 해당 컨텐츠 삭제
+            $(this).parent().remove();
+            $tab.parent().parent().find('li:last-child').addClass('active');   // 탭 마지막 li 요소에 탭 활성화
+           
+            return false;
+        });
+    });
+    </script>
+    
+    
+    
+	<div id="scrollbottom"></div>
+</body>
+</html>
