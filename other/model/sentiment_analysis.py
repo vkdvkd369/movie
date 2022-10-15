@@ -4,7 +4,6 @@ from konlpy.tag import Twitter
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import GridSearchCV
-from sklearn.svm import LinearSVC
 import joblib
 import os
 
