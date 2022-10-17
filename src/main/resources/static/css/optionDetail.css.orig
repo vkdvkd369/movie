@@ -22,7 +22,7 @@ body{
 
 .wrapper{
 	position: relative;
-	width: 850px;
+	width: 900px;
 	margin: 20px auto;
 }
 
@@ -54,22 +54,31 @@ body{
 	background: lightgray;
 }
 
+
 .view_main{
 	
 	background: #fff;
 	border-radius: 3px;
 	padding: 50px;
+	padding-bottom : 120px;
 }
 
 .list-view .view_item {
 	height: 200px;
 	background: #ccc;
-	border: 1px solid black;
+	border : 1px solid #000;
     border-radius: 10px;
 	margin: 20px;
 	padding: 10px 20px;
 	display: flex;
 	align-items: center;
+	cursor: pointer;
+	
+}
+
+.view_item.red{
+	border: 5px solid red;
+	background: rgb(253, 254, 214);
 }
 
 
@@ -109,13 +118,16 @@ body{
 }
 
 
+
 .grid-view .view_item {
 	display: inline-block;
-    border: 1px solid #e2efe1;
+    border-radius:10px;
     width: 230px;
     padding: 25px;
     text-align: center;
     margin: 10px;
+    cursor: pointer;
+    
 }
 
 .grid-view .view_item .vi_left{
@@ -142,6 +154,9 @@ body{
 	right: -135px;
 
 }
+
+
+
 .lists ul{
 	justify-content: center;
 }
@@ -167,3 +182,16 @@ body{
 	background-color: lightgray;
 	color: white;
 }
+
+
+.submit{
+	position:absolute; 
+	right: 1px; 
+	bottom: 1px;
+	width : 100px;
+	height : 70px;
+<<<<<<< HEAD
+}
+=======
+}
+>>>>>>> yoorim

@@ -1,17 +1,14 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Document</title>
 
-    <link rel="stylesheet" href="css/result.css">
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap"     rel="stylesheet">
+    <link rel="stylesheet" href="/css/result.css">
   
 </head>
 <body>
+	<header th:insert="/headerNav"></header>
     <div class="slidebox">
         <input type="radio" name="slide" id="slide01" checked>
         <input type="radio" name="slide" id="slide02">
@@ -27,7 +24,7 @@
                             <h3>1위 92 퍼센트 긍정적</h3>
                             <p>'탑건:매버릭'</p>
                         </div>
-                        <img src="images/test1.png">
+                        <img src="/images/test1.png">
                     </a>
                 </li>
                 <li class="slideitem">
@@ -37,7 +34,7 @@
                             <h3>2위 86 퍼센트 긍정적</h3>
                             <p>'범죄도시2</p>
                         </div>
-                        <img src="images/test2.jpg">
+                        <img src="/images/test2.jpg">
                     </a>
                 </li>
                 <li class="slideitem">
@@ -47,7 +44,7 @@
                             <h3>3위 78 퍼센트 긍정적</h3>
                             <p>'공조2:인터내셔날'</p>
                         </div>
-                        <img src="images/test4.jpg">
+                        <img src="/images/test4.jpg">
                     </a>
                 </li>
                 <li class="slideitem">
@@ -56,7 +53,7 @@
                             <h3>4위 66 퍼센트 긍정적</h3>
                             <p>'헌트'</p>
                         </div>
-                        <img src="images/test5.jpg">
+                        <img src="/images/test5.jpg">
                     </a>
                 </li>
                 <li class="slideitem">
@@ -65,7 +62,7 @@
                             <h3>5위 59 퍼센트 긍정적</h3>
                             <p>'토르:러브앤썬더'</p>
                         </div>
-                        <img src="images/test3.jpg">
+                        <img src="/images/test3.jpg">
                     </a>
                 </li>
     
