@@ -78,7 +78,7 @@ public class MoviesController {
 		return "recommend/list";
 	}
 
-	@GetMapping("resultSelect")
+	@GetMapping("OptionDetail")
 	public void resultSelect() {}
 	
 	//검색된 목록 중 선택된 영화들의 Movie DTO가 list로 넘어오도록 함
@@ -126,6 +126,8 @@ public class MoviesController {
 		System.out.println("감성분석 결과 수신 완료");
 		System.out.println(resultMap);
 
+
+		// api output : { movieId1 : 0.423, movieId2 : 0.693333, movieId3 : 0.8444, ...}
 		model.addAttribute("resultMap", resultMap);
 		return "recommend/result";
 
@@ -133,19 +135,5 @@ public class MoviesController {
 	
 
 	
-	@GetMapping("OptionDetail")
-	
-	public void OptionDetail() {}
-	
-	@GetMapping("result")
-	
-	public void result() {}
-	
-	@GetMapping("similarResult")
-	
-	public void similarResult() {}
-	
-	@GetMapping("gridView")
-	
-	public void gridView() {}
+
 }
