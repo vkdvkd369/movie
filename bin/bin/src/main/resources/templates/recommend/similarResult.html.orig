@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="/css/similarResult.css">
+</head>
+<body>
+	<header th:insert="/headerNav"></header>
+	<div class="head">
+        <h1 style="color: white;">유사도 결과</h1>
+    </div>
+    <div class="content">
+        <div class="mainMovie">
+            <div class="poster">
+                <a href="#">사진</a>
+            </div>
+            <dl class="lst_dsc">
+                <dt class="tit">
+                    <a href="#">제목</a>
+                </dt>
+                <dd>
+                    <dl class="info_txt1">
+                        <dt class="tit_t1">장르</dt>
+                        <dd>
+                            <span>장르1, 장르2</span>
+                        </dd>
+                        <dt class="tit_t2">감독</dt>
+                        <dd>
+                            <span class="link_txt">
+                                <a href="#">감독1</a>
+                            </span>
+                        </dd>
+                        <dt class="tit_t3">출연</dt>
+                        <dd>
+                            <span class="link_txt">
+                                <a href="#">배우1</a>
+                                <a href="#">배우2</a>
+                                <a href="#">배우3</a>
+                            </span>
+                        </dd>
+                    </dl>
+                </dd>
+            </dl>
+            
+        </div>
+    </div>
+    <div class="list">
+        <div class="movieList" style="margin-bottom: 10px; background-color: black;">
+            <h3 style="color:#fff;">비슷한 영화 추천</h3>
+        </div>
+        <div class="movieList">
+            <ol>
+            	<li>
+                	<div class="detail">
+                        <div class="rank">
+                            <p>90%입니다</p>
+                        </div>
+                        <div class="poster2">
+                            <a href="#">사진</a>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                	<div class="detail">
+                        <div class="rank">
+                            <p>80%입니다</p>
+                        </div>
+                        <div class="poster2">
+                            <a href="#">사진</a>
+                        </div>
+               		</div>
+                </li>
+                <li>
+                    <div class="detail">
+                        <div class="rank">
+                            <p>70%입니다</p>
+                        </div>
+                        <div class="poster2">
+                            <a href="#">사진</a>
+                        </div>
+                    </div>
+                </li>
+            </ol>
+        </div>
+    </div>
+	
+</body>
+</html>

@@ -4,11 +4,10 @@ from konlpy.tag import Twitter
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import GridSearchCV
-from sklearn.svm import LinearSVC
 import joblib
 import os
 
-OVERWRITE=[1,1,1]
+OVERWRITE=[0,0,0]
 
 train_df = pd.read_csv('ratings_train.txt', sep='\t', encoding='utf-8')
 test_df = pd.read_csv('ratings_test.txt', sep='\t', encoding='utf-8')
@@ -66,7 +65,6 @@ else:
     params = {'C': [1, 3.5, 4.5, 5.5, 10]}
     grid_cv = GridSearchCV(model, param_grid=params, cv=3, scoring='accuracy', verbose=1)
     grid_cv.fit(tfidf_matrix_train, train_df['label'])
-
 
     joblib.dump(grid_cv, 'grid_cv.pkl')
     joblib.dump(model, 'model.pkl')
