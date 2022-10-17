@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.acorn.recommovie.mapper.AutoComMapper">
+	
+	<!-- 자동완성 -->
+	<select id="autocompleteByTitle" parameterType="String" resultType="String">
+		SELECT movieTitle
+		FROM movies 
+		WHERE movieTitle like CONCAT('%',#{keyword},'%');
+	</select>
+	
+	<select id="autocompleteByPeople" parameterType="String" resultType="Person">
+		select personName
+		from people
+		where personName like '%'|| #{personName} || '%';
+	</select>
+	
+</mapper>

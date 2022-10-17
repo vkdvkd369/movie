@@ -16,13 +16,13 @@
 <body>
 	<header>
 		<div id="top">
-			<p><a href="/"><img class="logo" src="/images/icon.png" alt="홈로고"></a></p>
+			<p><a href="index"><img class="logo" src="/images/icon.png" alt="홈로고"></a></p>
 			<ul id="gnb">
 			    <li><a href="/">Home</a></li>
 			    <li><a th:href="@{/recommend/rangeSelect}">Recommend</a></li>
-			    <li><a href="/recommend/OptionDetail">view</a></li>
-			    <li><a href="/recommend/result">result</a></li>
-			    <li><a href="/recommend/similarResult">similar</a></li>
+			    <li><a href="@{/recommend/OptionDetail}">view</a></li>
+			    <li><a href="@{/recommend/rangeSelect}">Recommend</a></li>
+				<li><a href="{/recommend/resultSelect}">APITest</a></li>
 			</ul>
 		</div>		
 	</header>
