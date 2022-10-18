@@ -9,7 +9,7 @@ body{background:url('/images/moviebg.png')}
 .slidebox .slidelist {white-space:nowrap;font-size:0;overflow:hidden;}
 .slidebox .slidelist > li {display:inline-block;vertical-align:middle;width:100%;transition:all .5s;}
 .slidebox .slidelist > li > a {display:block;position:relative;}
-.slidebox .slidelist > li > a img {max-width:100%; }
+.slidebox .slidelist > li > a img {width:100%; }
 .slidebox .slidelist label {position:absolute;z-index:10;top:50%;transform:translateY(-50%);padding:50px;cursor:pointer;}
 
 /* 글자 나타나는 위치 */

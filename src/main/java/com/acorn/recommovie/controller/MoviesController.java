@@ -1,16 +1,24 @@
 package com.acorn.recommovie.controller;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
+
 import org.jsoup.*;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.TransientDataAccessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,6 +30,8 @@ import org.springframework.web.client.RestTemplate;
 import com.acorn.recommovie.dto.Genre;
 import com.acorn.recommovie.dto.Movie;
 import com.acorn.recommovie.mapper.MoviesMapper;
+import java.io.FileWriter;
+import java.io.FileReader;
 
 @Controller 
 @RequestMapping(value="/recommend", produces="text/plain;charset=UTF-8")
@@ -57,6 +67,7 @@ public class MoviesController {
 			e.printStackTrace();
 		}
 		
+		
 		// 검색된 모든 영화에 대한 썸네일 이미지URL을 가져옴
 		HashMap<Integer,String> thumbURLs = new HashMap<Integer,String>(); 
 	
@@ -83,63 +94,99 @@ public class MoviesController {
 	
 	//검색된 목록 중 선택된 영화들의 Movie DTO가 list로 넘어오도록 함
 	@PostMapping("resultSelect.do")
-	public String sentimentAnalysis(List<Movie> selectedMovies, Model model) {
+	public String sentimentAnalysis( /*List<Movie> selectedMovies,*/Model model ) throws IOException {
 		// test mapping
-		//List<Movie> selectedMovies = moviesMapper.selectMovieByTitle("포켓몬");
+		List<Movie> selectedMovies = moviesMapper.selectMovieByTitle("포켓몬");
 
-		HashMap<Integer,Object> movieReviews = new HashMap<>();
-		for (Movie movie : selectedMovies) {
-			String URL = "https://movie.naver.com/movie/point/af/list.naver?st=mcode&sword="+Integer.toString(movie.getMovieCode())+"&target=after";
-			Document mainPage = null;
-			try { mainPage = Jsoup.connect(URL).get(); } catch (IOException e) {e.printStackTrace();}
+		// HashMap<Integer,Object> movieReviews = new HashMap<>();
+		// for (Movie movie : selectedMovies) {
+		// 	String URL = "https://movie.naver.com/movie/point/af/list.naver?st=mcode&sword="+Integer.toString(movie.getMovieCode())+"&target=after";
+		// 	Document mainPage = null;
+		// 	try { mainPage = Jsoup.connect(URL).get(); } catch (IOException e) {e.printStackTrace();}
 			
-			int reviewNum = Integer.parseInt(mainPage.select(".c_88").text());
-			List<String> reviews = new ArrayList<String>();
-			String pageURL = URL+"&page=";
-			for(int i = 1; i <= reviewNum/10; i++) {
-				Document page = null;
-				try { page = Jsoup.connect(pageURL+Integer.toString(i)).get(); } catch (IOException e) {e.printStackTrace();}
-				Elements reviewElements = page.select(".title");
-				for (Element reviewElement : reviewElements) {
-					String review = reviewElement.ownText();
-					reviews.add(review);
-				}
-			}
+		// 	int reviewNum = Integer.parseInt(mainPage.select(".c_88").text());
+		// 	List<String> reviews = new ArrayList<String>();
+		// 	String pageURL = URL+"&page=";
+		// 	for(int i = 1; i <= reviewNum/10; i++) {
+		// 		Document page = null;
+		// 		try { page = Jsoup.connect(pageURL+Integer.toString(i)).get(); } catch (IOException e) {e.printStackTrace();}
+		// 		Elements reviewElements = page.select(".title");
+		// 		for (Element reviewElement : reviewElements) {
+		// 			String review = reviewElement.ownText();
+		// 			reviews.add(review);
+		// 		}
+		// 	}
 			
-			movieReviews.put(movie.getMovieId(), reviews);
-		}
+		// 	movieReviews.put(movie.getMovieId(), reviews);
+		// }
 		
-		System.out.println("Review data 수집 완료");
+		// System.out.println("Review data 수집 완료");
 
-		System.out.println("수집된 영화 개수 :"+movieReviews.size());
+		// System.out.println("수집된 영화 개수 :"+movieReviews.size());
 
-		RestTemplate restTemplate = new RestTemplate();
-		String apiURL ="http://localhost:8081/sentiment/predict";
+		// RestTemplate restTemplate = new RestTemplate();
+		// String apiURL ="http://localhost:8081/sentiment/predict";
 		
-		//post request to sentiment analysis server
-		ResponseEntity<String> response = restTemplate.postForEntity(apiURL, movieReviews, String.class);
-		String result = response.getBody();
+		// //post request to sentiment analysis server
+		// ResponseEntity<String> response = restTemplate.postForEntity(apiURL, movieReviews, String.class);
+		// String result = response.getBody();
 		
+		// FileWriter fw = new FileWriter("testData");
+		// fw.write(result);
+		// fw.flush();
+		// fw.close();
+
+		FileReader fr = new FileReader("testData");
 		Gson gson = new Gson();
-		Map<String, Object> resultMap = gson.fromJson(result, Map.class);
-		
-		System.out.println("감성분석 결과 수신 완료");
+		Map<String, Object> resultMap = gson.fromJson(fr, Map.class);
+		fr.close();
 		System.out.println(resultMap);
 
-		model.addAttribute("resultMap", resultMap);
+		System.out.println("감성분석 결과 수신 완료");
+		List<HashMap<String,Object>> sendMovies = new ArrayList<>();
+		for(List<Object> li : (List<List<Object>>)resultMap.get("repleMovie")){
+			for (Movie movie : selectedMovies){
+				if (Integer.parseInt((String)li.get(0))==movie.getMovieId()){
+					HashMap<String,Object> send = new HashMap<>();
+					send.put("movieId",movie.getMovieId());
+					send.put("movieTitle", movie.getMovieTitle());
+					send.put("positiveRatio",(Double)(li.get(1)));
+
+					String moviePageURL = "https://movie.naver.com/movie/bi/mi/basic.naver?code="+Integer.toString(movie.getMovieCode());
+					Document page = null;
+					try {page = Jsoup.connect(moviePageURL).get();} catch (IOException e) {e.printStackTrace();}
+					
+					Elements thumbImg = page.select(".poster > a > img");
+					String thumbURL=thumbImg.attr("src");
+					send.put("movieThumbUrl", thumbURL);
+					
+						
+					sendMovies.add(send);
+				};
+			
+			}
+		}
+		System.out.println(sendMovies);
+		
+		model.addAttribute("rst", sendMovies);
+
 		return "recommend/result";
-
+			
 	}
-	
 
+		
+		
+		
+
+	
+	@GetMapping("result")
+	public void result() {}
 	
 	@GetMapping("OptionDetail")
 	
 	public void OptionDetail() {}
 	
-	@GetMapping("result")
 	
-	public void result() {}
 	
 	@GetMapping("similarResult")
 	
