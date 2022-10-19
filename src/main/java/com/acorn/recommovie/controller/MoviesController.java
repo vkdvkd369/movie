@@ -26,8 +26,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 import com.acorn.recommovie.dto.Genre;
 import com.acorn.recommovie.dto.Movie;
@@ -98,56 +100,60 @@ public class MoviesController {
 	
 	//검색된 목록 중 선택된 영화들의 Movie DTO가 list로 넘어오도록 함
 	@PostMapping("resultSelect.do")
-	public String sentimentAnalysis( List<Movie> selectedMovies,Model model ) throws IOException {
-		// test mapping
-		// List<Movie> selectedMovies = moviesMapper.selectMovieByTitle("포켓몬");
-		System.out.println("selectedMovies : "+selectedMovies);
+	public String sentimentAnalysis(@RequestBody Map<String,List<String>> ids,Model model ) throws IOException {
+		//test mapping
+		//List<Movie> selectedMovies = moviesMapper.selectMovieByTitle("포켓몬");
+		List<Movie> selectedMovies = new ArrayList<Movie>();
 
-		// HashMap<Integer,Object> movieReviews = new HashMap<>();
-		// for (Movie movie : selectedMovies) {
-		// 	String URL = "https://movie.naver.com/movie/point/af/list.naver?st=mcode&sword="+Integer.toString(movie.getMovieCode())+"&target=after";
-		// 	Document mainPage = null;
-		// 	try { mainPage = Jsoup.connect(URL).get(); } catch (IOException e) {e.printStackTrace();}
+		for(String id : ids.get("ids")) {
 			
-		// 	int reviewNum = Integer.parseInt(mainPage.select(".c_88").text());
-		// 	List<String> reviews = new ArrayList<String>();
-		// 	String pageURL = URL+"&page=";
-		// 	for(int i = 1; i <= reviewNum/10; i++) {
-		// 		Document page = null;
-		// 		try { page = Jsoup.connect(pageURL+Integer.toString(i)).get(); } catch (IOException e) {e.printStackTrace();}
-		// 		Elements reviewElements = page.select(".title");
-		// 		for (Element reviewElement : reviewElements) {
-		// 			String review = reviewElement.ownText();
-		// 			reviews.add(review);
-		// 		}
-		// 	}
+			selectedMovies.add(moviesMapper.selectMovieById(Integer.parseInt(id)));
+		}
+		
+
+		HashMap<Integer,Object> movieReviews = new HashMap<>();
+		for (Movie movie : selectedMovies) {
+			String URL = "https://movie.naver.com/movie/point/af/list.naver?st=mcode&sword="+Integer.toString(movie.getMovieCode())+"&target=after";
+			Document mainPage = null;
+			try { mainPage = Jsoup.connect(URL).get(); } catch (IOException e) {e.printStackTrace();}
 			
-		// 	movieReviews.put(movie.getMovieId(), reviews);
-		// }
+			int reviewNum = Integer.parseInt(mainPage.select(".c_88").text());
+			List<String> reviews = new ArrayList<String>();
+			String pageURL = URL+"&page=";
+			for(int i = 1; i <= reviewNum/10; i++) {
+				Document page = null;
+				try { page = Jsoup.connect(pageURL+Integer.toString(i)).get(); } catch (IOException e) {e.printStackTrace();}
+				Elements reviewElements = page.select(".title");
+				for (Element reviewElement : reviewElements) {
+					String review = reviewElement.ownText();
+					reviews.add(review);
+				}
+			}
+			
+			movieReviews.put(movie.getMovieId(), reviews);
+		}
 		
-		// System.out.println("Review data 수집 완료");
+		System.out.println("Review data 수집 완료");
 
-		// System.out.println("수집된 영화 개수 :"+movieReviews.size());
+		System.out.println("수집된 영화 개수 :"+movieReviews.size());
 
-		// RestTemplate restTemplate = new RestTemplate();
-		// String apiURL ="http://localhost:8081/sentiment/predict";
+		RestTemplate restTemplate = new RestTemplate();
+		String apiURL ="http://localhost:8081/sentiment/predict";
 		
-		// //post request to sentiment analysis server
-		// ResponseEntity<String> response = restTemplate.postForEntity(apiURL, movieReviews, String.class);
-		// String result = response.getBody();
+		//post request to sentiment analysis server
+		ResponseEntity<String> response = restTemplate.postForEntity(apiURL, movieReviews, String.class);
+		String result = response.getBody();
 		
-		// FileWriter fw = new FileWriter("testData");
-		// fw.write(result);
-		// fw.flush();
-		// fw.close();
+		FileWriter fw = new FileWriter("testData");
+		fw.write(result);
+		fw.flush();
+		fw.close();
 
 		FileReader fr = new FileReader("testData");
 		Gson gson = new Gson();
 		Map<String, Object> resultMap = gson.fromJson(fr, Map.class);
 		fr.close();
-
-		System.out.println("감성분석 결과 수신 완료");
-		System.out.println(resultMap);
+		// System.out.println(resultMap);
 
 		System.out.println("감성분석 결과 수신 완료");
 		List<HashMap<String,Object>> sendMovies = new ArrayList<>();
@@ -173,50 +179,12 @@ public class MoviesController {
 			
 			}
 		}
-		System.out.println(sendMovies);
+		// System.out.println(sendMovies);
 		
 		model.addAttribute("rst", sendMovies);
 
-		return "recommend/result";
-			
+		return "redirect:/recommend/result";
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-			
 	}
 
 		
