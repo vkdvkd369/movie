@@ -26,19 +26,19 @@ body{
 	margin: 20px auto;
 }
 
-.links{
+.view_mode{
     width: 180px;
     height: 50px;
 	border-radius: 5px;
 
 }
 
-.links ul{
+.view_mode ul{
 	display: flex;
 	justify-content: center;
 }
 
-.links ul li{
+.view_mode ul li{
 	padding: 10px;
 	border: 1px solid #000;
 	border-radius: 3px;
@@ -49,8 +49,8 @@ body{
 	cursor: pointer;
 }
 
-.links ul li:hover,
-.links ul li.active{
+.view_mode ul li:hover,
+.view_mode ul li.active{
 	background: lightgray;
 }
 
@@ -76,7 +76,7 @@ body{
 	
 }
 
-.view_item.red{
+.view_item.selected{
 	border: 5px solid red;
 	background: rgb(253, 254, 214);
 }
@@ -147,7 +147,7 @@ body{
 }
 
 
-.lists{
+.sel{
 	position:absolute;
 	padding: 10px;
 	top: 35px;
@@ -157,11 +157,11 @@ body{
 
 
 
-.lists ul{
+.sel ul{
 	justify-content: center;
 }
 
-.lists ul li{
+.sel ul li{
 	width: 120px;
 	height: 50px;
 	border: 1px solid #000;
@@ -177,8 +177,8 @@ body{
 	cursor: pointer;
 }
 
-.lists ul li:hover,
-.lists ul li.active{
+.sel ul li:hover,
+.sel ul li.active{
 	background-color: lightgray;
 	color: white;
 }

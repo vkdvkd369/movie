@@ -2,9 +2,15 @@ package com.acorn.recommovie.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import com.google.gson.Gson;
 import org.jsoup.*;
 import org.jsoup.nodes.Document;
@@ -43,7 +49,6 @@ public class MoviesController {
 			e.printStackTrace();
 		}
 		model.addAttribute("allGenre", allGenre);
-		System.out.println(allGenre);
 		return "recommend/rangeSelect";
 	}
 	
@@ -73,12 +78,20 @@ public class MoviesController {
 		
 		model.addAttribute("thumbURLs", thumbURLs);
 		model.addAttribute("movies",movies);
+		System.out.println("movies : "+movies);
+		System.out.println("thumbURLs : "+thumbURLs);
 
 		// to resultSelect
-		return "recommend/list";
+		// return "recommend/resultSelect";
+		return "recommend/resultSelect";
 	}
 
-	@GetMapping("OptionDetail")
+	@GetMapping("test")
+	public void test() {
+		
+	}
+
+	@GetMapping("resultSelect")
 	public void resultSelect() {}
 	
 	//검색된 목록 중 선택된 영화들의 Movie DTO가 list로 넘어오도록 함
@@ -120,8 +133,14 @@ public class MoviesController {
 		ResponseEntity<String> response = restTemplate.postForEntity(apiURL, movieReviews, String.class);
 		String result = response.getBody();
 		
+		// get Map<String, Object> resultMap using Gson
 		Gson gson = new Gson();
 		Map<String, Object> resultMap = gson.fromJson(result, Map.class);
+
+		// get List on resultMap using get
+		
+		resultMap.get("repleMovie")
+		
 		
 		System.out.println("감성분석 결과 수신 완료");
 		System.out.println(resultMap);
@@ -129,6 +148,20 @@ public class MoviesController {
 
 		// api output : { movieId1 : 0.423, movieId2 : 0.693333, movieId3 : 0.8444, ...}
 		model.addAttribute("resultMap", resultMap);
+
+		// sorting resultMap using Stream
+		// result : { movieId3 : 0.8444, movieId2 : 0.693333, movieId1 : 0.423, ...}
+		Map<String, Object> sortedResultMap = resultMap.entrySet().stream()
+				.sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))
+				.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
+
+
+		
+		model.addAttribute("sortedResultMap", sortedResultMap);
+		// to result
+		// return "recommend/result";
+		return "recommend/result";
+	}
 		return "recommend/result";
 
 	}
