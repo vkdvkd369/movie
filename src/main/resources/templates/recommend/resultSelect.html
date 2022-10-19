@@ -69,18 +69,22 @@
 							<p class="content" th:text="${movie?.movieStory}"></p>
 							<div class="btn" th:onclick="|location.href='https://movie.naver.com/movie/bi/mi/basic.naver?code=${movie?.movieCode}'|">View More</div>
 						</div>
+						<input class="movieId" type="hidden" th:value="${movie?.movieId}" name="movieId">
 					</div>
+					
 				</th:block>
 			</div>
 		</div>
 
 		<div class="view_main" id="selected">
-			<div class="view_wrap list-view"></div>
+			<div class="view_wrap list-view">
+
+			</div>
 
 		</div>
 		<div id="scrollbottom"></div>
 		<div>
-			<button class="submit" type="submit" id="complete">선택 완료</button>
+			<button type="button" id="complete">선택 완료</button>
 		</div>
 	</div>
 	

@@ -93,7 +93,8 @@ all_items.forEach(function(item){
         if(sel){
             searchViewWrap.append(item);
         }
-        let num = document.querySelectorAll(".view_item.selected").length;
+        let selected_Items = document.querySelectorAll(".view_item.selected");
+        let num = selected_Items.length;
 
         if(num == 0){
             selected_num.innerText = "빔";
@@ -101,3 +102,30 @@ all_items.forEach(function(item){
             selected_num.innerText = num;
         }
     })});
+
+// if "complete"Id button is clicked, then the selected items are sent to the server using ajax.
+document.getElementById("complete").addEventListener("click", function(){
+    let selected_Items = document.querySelectorAll(".view_item.selected");
+    let num = selected_Items.length;
+    if(num == 0){
+        alert("선택된 항목이 없습니다.");
+    }else{
+        let ids = [];
+        selected_Items.forEach(function(item){
+            ids.push(item.getElementsByClassName("movieId")[0].value);
+        });
+        console.log(JSON.stringify({"ids": ids}));
+        $.ajax({
+            type: "POST",
+            url: "/recommend/resultSelect.do",
+            headers:{'Content-Type': 'application/json'},
+            data: JSON.stringify({"ids": ids}),
+            success: function(response){
+                //move response page
+                
+            }
+        })
+    }
+});
+
+
