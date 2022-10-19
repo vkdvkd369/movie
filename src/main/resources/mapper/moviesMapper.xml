@@ -42,4 +42,12 @@
 		SELECT * FROM genre
 	</select>
 	
+	<select id="selectMovieByMoviecode" resultType = "MovieMap">
+		SELECT m.movieId, m.movieTitle, m.movieCode, m.movieStory, mp.personId, p.personName, p.personPosition
+			FROM movies m
+			LEFT JOIN moviePeople mp on m.movieId = mp.movieId
+			LEFT JOIN people p on mp.personId = p.personId
+			WHERE m.movieCode = #{movieCode};
+	</select>
+	
 </mapper>
