@@ -32,6 +32,11 @@ def predict():
             result[movieId] = positiveRatio
         else:
             result[movieId] = None
+<<<<<<< HEAD
+    print(result)
+    sorted_dict = sorted(result.items(), key=lambda x: x[1], reverse=True)
+    return result
+=======
 
     noRepleMovie={}
     repleMovie={}
@@ -45,6 +50,7 @@ def predict():
     rtn = {"noRepleMovie":noRepleMovie, "repleMovie":sorted_reple_movie}
     return rtn
 
+>>>>>>> yoorim
 
 
 if __name__ == '__main__':

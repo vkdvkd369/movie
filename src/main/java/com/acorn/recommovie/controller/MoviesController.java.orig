@@ -3,18 +3,26 @@ package com.acorn.recommovie.controller;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+<<<<<<< HEAD
 import java.util.Collections;
+=======
+>>>>>>> yoorim
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+<<<<<<< HEAD
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+=======
 import java.util.Map.Entry;
+>>>>>>> yoorim
+
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
+
 import org.jsoup.*;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -140,6 +148,38 @@ public class MoviesController {
 		// ResponseEntity<String> response = restTemplate.postForEntity(apiURL, movieReviews, String.class);
 		// String result = response.getBody();
 		
+<<<<<<< HEAD
+		// get Map<String, Object> resultMap using Gson
+		Gson gson = new Gson();
+		Map<String, Object> resultMap = gson.fromJson(result, Map.class);
+
+		// get List on resultMap using get
+		
+		resultMap.get("repleMovie")
+		
+		
+		System.out.println("감성분석 결과 수신 완료");
+		System.out.println(resultMap);
+
+
+		// api output : { movieId1 : 0.423, movieId2 : 0.693333, movieId3 : 0.8444, ...}
+		model.addAttribute("resultMap", resultMap);
+
+		// sorting resultMap using Stream
+		// result : { movieId3 : 0.8444, movieId2 : 0.693333, movieId1 : 0.423, ...}
+		Map<String, Object> sortedResultMap = resultMap.entrySet().stream()
+				.sorted(Collections.reverseOrder(Map.Entry.comparingByValue()))
+				.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
+
+
+		
+		model.addAttribute("sortedResultMap", sortedResultMap);
+		// to result
+		// return "recommend/result";
+		return "recommend/result";
+	}
+		return "recommend/result";
+=======
 		// FileWriter fw = new FileWriter("testData");
 		// fw.write(result);
 		// fw.flush();
@@ -147,9 +187,8 @@ public class MoviesController {
 
 		FileReader fr = new FileReader("testData");
 		Gson gson = new Gson();
-		
-
-		System.out.println("감성분석 결과 수신 완료");
+		Map<String, Object> resultMap = gson.fromJson(fr, Map.class);
+		fr.close();
 		System.out.println(resultMap);
 
 		System.out.println("감성분석 결과 수신 완료");
@@ -161,6 +200,7 @@ public class MoviesController {
 					send.put("movieId",movie.getMovieId());
 					send.put("movieTitle", movie.getMovieTitle());
 					send.put("positiveRatio",(Double)(li.get(1)));
+>>>>>>> yoorim
 
 					String moviePageURL = "https://movie.naver.com/movie/bi/mi/basic.naver?code="+Integer.toString(movie.getMovieCode());
 					Document page = null;
@@ -182,44 +222,6 @@ public class MoviesController {
 
 		return "recommend/result";
 			
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-			
 	}
 
 		
@@ -230,6 +232,9 @@ public class MoviesController {
 	@GetMapping("result")
 	public void result() {}
 	
+<<<<<<< HEAD
+
+=======
 	@GetMapping("OptionDetail")
 	
 	public void OptionDetail() {}
@@ -243,4 +248,5 @@ public class MoviesController {
 	@GetMapping("gridView")
 	
 	public void gridView() {}
+>>>>>>> yoorim
 }
