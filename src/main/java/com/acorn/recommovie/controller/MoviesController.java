@@ -93,19 +93,15 @@ public class MoviesController {
 		return "recommend/resultSelect";
 	}
 
-	@GetMapping("test")
-	public void test() {
-		
-	}
-
 	@GetMapping("resultSelect")
 	public void resultSelect() {}
 	
 	//검색된 목록 중 선택된 영화들의 Movie DTO가 list로 넘어오도록 함
 	@PostMapping("resultSelect.do")
-	public String sentimentAnalysis( /*List<Movie> selectedMovies,*/Model model ) throws IOException {
+	public String sentimentAnalysis( List<Movie> selectedMovies,Model model ) throws IOException {
 		// test mapping
-		List<Movie> selectedMovies = moviesMapper.selectMovieByTitle("포켓몬");
+		// List<Movie> selectedMovies = moviesMapper.selectMovieByTitle("포켓몬");
+		System.out.println("selectedMovies : "+selectedMovies);
 
 		// HashMap<Integer,Object> movieReviews = new HashMap<>();
 		// for (Movie movie : selectedMovies) {
@@ -147,7 +143,8 @@ public class MoviesController {
 
 		FileReader fr = new FileReader("testData");
 		Gson gson = new Gson();
-		
+		Map<String, Object> resultMap = gson.fromJson(fr, Map.class);
+		fr.close();
 
 		System.out.println("감성분석 결과 수신 완료");
 		System.out.println(resultMap);
