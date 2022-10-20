@@ -1,38 +1,29 @@
 package com.acorn.recommovie.controller;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-import java.util.Map.Entry;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
 import org.jsoup.*;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.TransientDataAccessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 import com.acorn.recommovie.dto.Genre;
 import com.acorn.recommovie.dto.Movie;
+import com.acorn.recommovie.dto.MovieId;
 import com.acorn.recommovie.mapper.MoviesMapper;
 import java.io.FileWriter;
 import java.io.FileReader;
@@ -98,14 +89,14 @@ public class MoviesController {
 	@GetMapping("resultSelect")
 	public void resultSelect() {}
 	
-	//검색된 목록 중 선택된 영화들의 Movie DTO가 list로 넘어오도록 함
+	//get form data not using dto by list
 	@PostMapping("resultSelect.do")
-	public String sentimentAnalysis(@RequestBody Map<String,List<String>> ids,Model model ) throws IOException {
+	public String sentimentAnalysis(@RequestParam String[] movieId,Model model ) throws IOException {
 		//test mapping
 		//List<Movie> selectedMovies = moviesMapper.selectMovieByTitle("포켓몬");
 		List<Movie> selectedMovies = new ArrayList<Movie>();
 
-		for(String id : ids.get("ids")) {
+		for(String id : movieId) {
 			
 			selectedMovies.add(moviesMapper.selectMovieById(Integer.parseInt(id)));
 		}
@@ -183,7 +174,7 @@ public class MoviesController {
 		
 		model.addAttribute("rst", sendMovies);
 
-		return "redirect:/recommend/result";
+		return "recommend/result";
 
 	}
 

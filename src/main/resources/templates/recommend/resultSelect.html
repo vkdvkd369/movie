@@ -22,6 +22,10 @@
 		movies = [[${movies}]];
 	</script>
 
+	<form action="/recommend/resultSelect.do" method="post" id="sendForm">
+
+	</form>
+
 	<div class="wrapper">
 		<div class="view_mode">
 			<ul>
@@ -84,7 +88,7 @@
 		</div>
 		<div id="scrollbottom"></div>
 		<div>
-			<button type="button" id="complete">선택 완료</button>
+			<button type="button" id="complete" form="sendForm">선택 완료</button>
 		</div>
 	</div>
 	
