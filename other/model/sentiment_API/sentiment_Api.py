@@ -1,6 +1,6 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request
 from konlpy.tag import Okt
-import json
+from sklearn.metrics.pairwise import cosine_similarity
 import joblib
 
 app = Flask(__name__)
@@ -70,7 +70,7 @@ def predict_similar():
       movie_name.append(index_to_title[i])
 
     send={}
-    for mn, ms in zip(movie_name, movie_scores):
+    for i,mn, ms in range(len(movie_name)),zip(movie_name, movie_scores):
       send[mn] = ms
 
 
