@@ -201,20 +201,61 @@ public class MoviesController {
 	
 	
 	
-	@GetMapping("/similarResult/{movieCode}")
-	public Movie selectMovieByMoviecode( @PathVariable int movieCode, Model model) {
-		Movie mainmovie = moviesMapper.selectMovieByMoviecode(movieCode);
+	@GetMapping("/similarResult") 
+	public void similarResult() {}
+//	public Movie selectMovieByMoviecode( @PathVariable int movieCode, Model model) {
+//		Movie mainmovie = moviesMapper.selectMovieByMoviecode(movieCode);
+//		
+//		return mainmovie;
 		
-		return mainmovie;
-		
-	}
-	
+//	}
 	
 	
 	@PostMapping("/similarResult.do")
-	public void similalrAnalysis( String title, Model model) throws IOException{
-		HashMap<String, String> mainMovie = new HashMap<>();
-		mainMovie.put("title", title);
+//	public void similalrAnalysis( String title, Model model) throws IOException{
+//		HashMap<String, String> mainMovie = new HashMap<>();
+//		mainMovie.put("title", title);
+//		
+//	}
+	public String similarAnalysis(@RequestBody int movieCode, Model model) throws IOException{
+		List<Movie> mainMovie = new ArrayList<Movie>();
+		
+		mainMovie.add(moviesMapper.selectMovieByMoviecode(movieCode));
+		
+		HashMap<String, Object> main_Movie = new HashMap<>();
+		main_Movie.put("mainMovie", mainMovie);
+		
+		// title 만 받을 경우 
+		// mainTitle.add(moviesMapper.selectTitleByMoviecode(movieCode));
+		// HashMap<String, String> mainTitle = new HashMap<>();
+		// mainTitle.put("title", mainTitle)
+		
+		
+		RestTemplate restTemplate = new RestTemplate();
+		String apiURL = "http://localhost:8081/similar/predict"; // 추후 변경
+		
+		ResponseEntity<String> response = restTemplate.postForEntity(apiURL, main_Movie, String.class);
+		String result = response.getBody();
+		
+		FileWriter fw = new FileWriter("data");
+		fw.write(result);
+		fw.flush();
+		fw.close();
+		
+		FileReader fr = new FileReader("data");
+		Gson gson = new Gson();
+		Map<String, Object> similarResultMap = gson.fromJson(fr, Map.class);
+		fr.close();
+		
+		//{"similarMovie":{1: 유사도1위 dto, 2:유사도 2위 dto ,---}}
+		List<HashMap<String,Object>> similarMovies = new ArrayList<>();
+		for(List<Object> ob : (List<List<Object>>)similarResultMap.get("similarMovie")) {
+			 HashMap <String, Object> similarDto = new HashMap<>();
+			 // 결과 map 만들기, 이미지 추가 해야됨
+			 	 
+		}
+		model.addAttribute("rst",similarMovies);
+		return "redirect:/recommend/result";
 		
 	}
 	
