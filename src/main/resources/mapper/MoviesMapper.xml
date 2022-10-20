@@ -49,5 +49,17 @@
 	<select id="selectAllGenre" resultMap="GenreMap">
 		SELECT * FROM genre
 	</select>
+
+	<select id="selectMovieStoryById">
+		SELECT movieStory FROM movies WHERE movieId=#{movieId}
+	</select>
+
+	<select id="selectMovieByTitleEqual" parameterType="String" resultType="Movie">
+		SELECT m.*, mgjg.genreId, mgjg.genreName, mpjp.personId, mpjp.personName, mpjp.personPosition
+			FROM movies m
+			LEFT JOIN (SELECT mg.movieId, g.genreId, g.genreName FROM movieGenre mg JOIN genre g ON mg.genreId=g.genreId) mgjg ON m.movieId=mgjg.movieId
+			LEFT JOIN (SELECT mp.movieId, p.personId, p.personName, p.personPosition FROM moviePeople mp JOIN people p ON mp.personId=p.personId) mpjp ON m.movieId=mpjp.movieId
+			WHERE m.movieId=#{movieTitle};
+	</select>
 	
 </mapper>
