@@ -11,8 +11,9 @@ import com.acorn.recommovie.dto.Movie;
 public interface MoviesMapper {
 	 List<Movie> selectAllMovie();
 	 List<Movie> selectMovieByTitle(String movieTitle);
+	 Movie selectMovieById(int movieId);
 	 List<Genre> selectAllGenre();
-	 
-	 Movie selectMovieByMoviecode(int movieCode);
+	 String selectMovieStoryById(int movieId);
+	 Movie selectMovieByTitleEqual(String movieTitle);
 }
 

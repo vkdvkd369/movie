@@ -6,10 +6,7 @@ USE movie;
 
 CREATE TABLE movies(
 	movieId INT AUTO_INCREMENT PRIMARY KEY,
-	movieCode INT
-	movieTitle VARCHAR(100) NOT NULL,
-	movieYear INT,
-	movieStory VARCHAR(25000)
+	movieTitle VARCHAR(100) NOT NULL
 );
 
 CREATE TABLE genre

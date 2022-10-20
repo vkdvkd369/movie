@@ -22,6 +22,8 @@ import org.springframework.web.client.RestTemplate;
 import com.acorn.recommovie.dto.Genre;
 import com.acorn.recommovie.dto.Movie;
 import com.acorn.recommovie.mapper.MoviesMapper;
+import java.io.FileWriter;
+import java.io.FileReader;
 
 @Controller 
 @RequestMapping(value="/recommend", produces="text/plain;charset=UTF-8")
@@ -43,7 +45,6 @@ public class MoviesController {
 			e.printStackTrace();
 		}
 		model.addAttribute("allGenre", allGenre);
-		System.out.println(allGenre);
 		return "recommend/rangeSelect";
 	}
 	
@@ -56,6 +57,7 @@ public class MoviesController {
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
+		
 		
 		// 검색된 모든 영화에 대한 썸네일 이미지URL을 가져옴
 		HashMap<Integer,String> thumbURLs = new HashMap<Integer,String>(); 
@@ -73,21 +75,29 @@ public class MoviesController {
 		
 		model.addAttribute("thumbURLs", thumbURLs);
 		model.addAttribute("movies",movies);
+		System.out.println("movies : "+movies);
+		System.out.println("thumbURLs : "+thumbURLs);
 
 		// to resultSelect
-		return "recommend/list";
+		// return "recommend/resultSelect";
+		return "recommend/resultSelect";
 	}
-	
-	
 
 	@GetMapping("resultSelect")
 	public void resultSelect() {}
 	
-	//검색된 목록 중 선택된 영화들의 Movie DTO가 list로 넘어오도록 함
+	//get form data not using dto by list
 	@PostMapping("resultSelect.do")
-	public String sentimentAnalysis(List<Movie> selectedMovies, Model model) {
-		// test mapping
+	public String sentimentAnalysis(@RequestParam String[] movieId,Model model ) throws IOException {
+		//test mapping
 		//List<Movie> selectedMovies = moviesMapper.selectMovieByTitle("포켓몬");
+		List<Movie> selectedMovies = new ArrayList<Movie>();
+
+		for(String id : movieId) {
+			
+			selectedMovies.add(moviesMapper.selectMovieById(Integer.parseInt(id)));
+		}
+		
 
 		HashMap<Integer,Object> movieReviews = new HashMap<>();
 		for (Movie movie : selectedMovies) {
@@ -122,79 +132,87 @@ public class MoviesController {
 		ResponseEntity<String> response = restTemplate.postForEntity(apiURL, movieReviews, String.class);
 		String result = response.getBody();
 		
-		Gson gson = new Gson();
-		Map<String, Object> resultMap = gson.fromJson(result, Map.class);
-		
-		System.out.println("감성분석 결과 수신 완료");
-		System.out.println(resultMap);
+		FileWriter fw = new FileWriter("testData");
+		fw.write(result);
+		fw.flush();
+		fw.close();
 
-		model.addAttribute("resultMap", resultMap);
+		FileReader fr = new FileReader("testData");
+		Gson gson = new Gson();
+		Map<String, Object> resultMap = gson.fromJson(fr, Map.class);
+		fr.close();
+		// System.out.println(resultMap);
+
+		System.out.println("감성분석 결과 수신 완료");
+		List<HashMap<String,Object>> sendMovies = new ArrayList<>();
+		for(List<Object> li : (List<List<Object>>)resultMap.get("repleMovie")){
+			for (Movie movie : selectedMovies){
+				if (Integer.parseInt((String)li.get(0))==movie.getMovieId()){
+					HashMap<String,Object> send = new HashMap<>();
+					send.put("movieId",movie.getMovieId());
+					send.put("movieTitle", movie.getMovieTitle());
+					send.put("positiveRatio",(Double)(li.get(1)));
+
+					String moviePageURL = "https://movie.naver.com/movie/bi/mi/basic.naver?code="+Integer.toString(movie.getMovieCode());
+					Document page = null;
+					try {page = Jsoup.connect(moviePageURL).get();} catch (IOException e) {e.printStackTrace();}
+					
+					Elements thumbImg = page.select(".poster > a > img");
+					String thumbURL=thumbImg.attr("src");
+					send.put("movieThumbUrl", thumbURL);
+					
+						
+					sendMovies.add(send);
+				};
+			
+			}
+		}
+		// System.out.println(sendMovies);
+		
+		model.addAttribute("rst", sendMovies);
+
 		return "recommend/result";
 
 	}
-	
 
-	
-	@GetMapping("OptionDetail")
-	
-	public void OptionDetail() {}
-	
+	@GetMapping("test")
+	public void test(){}
+
 	@GetMapping("result")
-	
 	public void result() {}
-	
-	
-	
-	@GetMapping("similarResult/{movieCode}")
-	public String movieSelect(@RequestParam int movieCode, Model model) {
-		
-		try {
-			 Movie mainmovie = moviesMapper.selectMovieByMoviecode(movieCode);
-			 String title = mainmovie.getMovieTitle();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		
 
-		return "/similarResult";
-	}
-	
+	@GetMapping("similarResult")
+	public void similarResult(){}
+
 	@PostMapping("similarResult.do")
-	public String similarResult( Movie mainmovie, Model model) {
-		
-		HashMap<String, String> mainMovie = new HashMap<String, String>();
-		mainMovie.put("title", mainmovie.getMovieTitle());
-		
+	public String similarAnalysis(/* @RequestParam int movieId, */ Model model){
+		//test mapping
+		int movieId = 16995;
+
+		String movieStory = moviesMapper.selectMovieStoryById(movieId);
+		System.out.println(movieStory);
 		RestTemplate restTemplate = new RestTemplate();
 		String apiURL ="http://localhost:8081/similar/predict";
-		ResponseEntity<String> response = restTemplate.postForEntity(apiURL, title, String.class);
-		String result = response.getBody();
+		HashMap<String,Object> request = new HashMap<>();
+		request.put("movieStory",movieStory);
+		ResponseEntity<String> response = restTemplate.postForEntity(apiURL, request, String.class);
+
 		
 		Gson gson = new Gson();
-		Map<String, Object> resultMap = gson.fromJson(result, Map.class);
+		Map<String, Map<String,Object>> resultMap = gson.fromJson(response.getBody(), Map.class);
+		System.out.println(resultMap);
+		HashMap<String, Map<String,Object>> send = new HashMap<>();
+		for(Map.Entry<String,Map<String, Object>> entry : resultMap.entrySet()){
+			HashMap<String,Object> sendsub = new HashMap<>();
+			Movie movie = moviesMapper.selectMovieByTitleEqual(entry.getValue().get("title").toString());
+			sendsub.put("movie", movie);
+			sendsub.put("score", entry.getValue().get("score"));
+			sendsub.put("thumbURL", "https://movie.naver.com/movie/bi/mi/photoViewPopup.naver?movieCode="+movie.getMovieCode());
+			send.put(entry.getKey(), sendsub);
+		}
 		
-		model.addAttribute("resultMap",resultMap);
-		return "similar/result";
+		model.addAttribute("send", send);
+		// send 형식: { "index" : {"score":0.918301105160158, "movie": moviedto } }
+		return "recommend/similarResult";
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-
-	
-	@GetMapping("gridView")
-	
-	public void gridView() {}
 }

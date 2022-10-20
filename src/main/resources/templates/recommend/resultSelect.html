@@ -1,14 +1,96 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8">
-<title>api test Page</title>
+    <meta charset="UTF-8">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
+    
+	<link rel="stylesheet" href="/css/resultSelect.css">
+    <link rel="stylesheet" href="/css/headerNav.css">    
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    
+    <script type="text/javascript" src="/js/view/views.js" defer></script>
+    <script type="text/javascript" src="/js/view/scroll.js" defer></script>
+    
+    <title>Document</title>
+
 </head>
 <body>
-    <form action="/recommend/resultSelect.do" method="post">
-        <button>go to resultSelect.do</button>
-    </form>
+    <header th:insert="/headerNav"></header>
+	<script th:inline="javascript">
+		movies = [[${movies}]];
+	</script>
 
+	<form action="/recommend/resultSelect.do" method="post" id="sendForm">
+
+	</form>
+
+	<div class="wrapper">
+		<div class="view_mode">
+			<ul>
+				<li data-view="list-view" class="li-list active">
+				<i class="fas fa-th-list"></i>
+				리스트 뷰</li>
+				<li data-view="grid-view" class="li-grid">
+				<i class="fas fa-th-list"></i>
+				그리드 뷰</li>
+			</ul>
+			<!-- 아래버튼 -->
+ 			<a style="display:scroll; position:absolute; right: 1px; top: 50px; " href="#scrollbottom" title=Down>
+				
+				<p style="size: 10px; width: 40px; height: 40px; padding:10px 0px 0px 12px; background:#333; color:#fff; border-radius: 3px;">
+					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-down" viewBox="0 0 16 16">
+					<path d="M3.204 5h9.592L8 10.481 3.204 5zm-.753.659 4.796 5.48a1 1 0 0 0 1.506 0l4.796-5.48c.566-.647.106-1.659-.753-1.659H3.204a1 1 0 0 0-.753 1.659z"/>
+				  </svg></p></a> 
+		</div>
+		<div class="sel">
+			<ul >
+				<li data-view="search" class="li-search active">
+					검색목록
+				</li>
+				<li data-view="selected" class="li-selected">
+					선택됨 (<span id="selected_num">빔</span>)
+				</li>
+				
+			</ul>
+
+
+		</div>
+
+
+		<div class="view_main" id="searched">
+			<div class="view_wrap list-view">
+				<th:block th:each="movie : ${movies}">
+					<div class="view_item">
+						<div class="vi_left">
+							<th:block th:if="not ${thumbURLs[movie.movieId].isEmpty()}">
+								<img th:src="${thumbURLs[movie.movieId]}" th:alt="${thumbURLs[movie.movieId]}">
+							</th:block>
+						</div>
+						<div class="vi_right">
+							<p class="title" th:text="${movie?.movieTitle}"></p>
+							<p class="content" th:text="${movie?.movieStory}"></p>
+							<div class="btn" th:onclick="|location.href='https://movie.naver.com/movie/bi/mi/basic.naver?code=${movie?.movieCode}'|">View More</div>
+						</div>
+						<input class="movieId" type="hidden" th:value="${movie?.movieId}" name="movieId">
+					</div>
+					
+				</th:block>
+			</div>
+		</div>
+
+		<div class="view_main" id="selected">
+			<div class="view_wrap list-view">
+
+			</div>
+
+		</div>
+		<div id="scrollbottom"></div>
+		<div>
+			<button type="button" id="complete" form="sendForm">선택 완료</button>
+		</div>
+	</div>
+	
 </body>
-
 </html>
