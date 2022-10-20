@@ -41,5 +41,9 @@
 	<select id="selectAllGenre" resultMap="GenreMap">
 		SELECT * FROM genre
 	</select>
+
+	<select id="selectMovieStoryById">
+		SELECT movieStory FROM movies WHERE movieId=#{movieId}
+	</select>
 	
 </mapper>

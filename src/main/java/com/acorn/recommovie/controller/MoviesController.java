@@ -130,22 +130,26 @@ public class MoviesController {
 		return "recommend/result";
 
 	}
+
+	@GetMapping("result")
+	public void result() {}
+
+	@GetMapping("similarResult")
+	public void similarResult() {}
+
+	@PostMapping("similarResult.do")
+	public String similarAnalysis(@RequestParam int movieId, Model model){
+		String movieStory = moviesMapper.selectMovieStoryById(movieId);
+		RestTemplate restTemplate = new RestTemplate();
+		String apiURL ="http://localhost:8081/similar/predict";
+		ResponseEntity<String> response = restTemplate.postForEntity(apiURL, movieStory, String.class);
+		Gson gson = new Gson();
+		Map<String, Object> resultMap = gson.fromJson(response.getBody(), Map.class);
+		System.out.println(resultMap);
+		
+		model.addAttribute("resultMap", resultMap);
+		return "recommend/similarResult";
+	}
 	
 
-	
-	@GetMapping("OptionDetail")
-	
-	public void OptionDetail() {}
-	
-	@GetMapping("result")
-	
-	public void result() {}
-	
-	@GetMapping("similarResult")
-	
-	public void similarResult() {}
-	
-	@GetMapping("gridView")
-	
-	public void gridView() {}
 }
