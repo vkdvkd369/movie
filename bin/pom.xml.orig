@@ -5,16 +5,6 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-<<<<<<< HEAD
-		<version>2.7.2</version>
-		<relativePath/> <!-- lookup parent from repository -->
-	</parent>
-	<groupId>com.read_room</groupId>
-	<artifactId>reading_room</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>reading_room</name>
-	<description>Demo project for Spring Boot</description>
-=======
 		<version>2.7.4</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
@@ -23,7 +13,6 @@
 	<version>0.0.1</version>
 	<name>recommovie</name>
 	<description>movie recommending web service</description>
->>>>>>> b180af7e0409ba9951440722d21639cc9a97a1ab
 	<properties>
 		<java.version>17</java.version>
 	</properties>
@@ -63,15 +52,12 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-<<<<<<< HEAD
-=======
 
 		<dependency>
 		    <groupId>org.jsoup</groupId>
 		    <artifactId>jsoup</artifactId>
 		</dependency>
 		
->>>>>>> b180af7e0409ba9951440722d21639cc9a97a1ab
 	</dependencies>
 
 	<build>
@@ -91,8 +77,6 @@
 		</plugins>
 	</build>
 
-<<<<<<< HEAD
-=======
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -102,5 +86,4 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
->>>>>>> b180af7e0409ba9951440722d21639cc9a97a1ab
 </project>

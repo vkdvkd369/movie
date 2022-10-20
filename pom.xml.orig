@@ -5,16 +5,6 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-<<<<<<< HEAD
-		<version>2.7.2</version>
-		<relativePath/> <!-- lookup parent from repository -->
-	</parent>
-	<groupId>com.read_room</groupId>
-	<artifactId>reading_room</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>reading_room</name>
-	<description>Demo project for Spring Boot</description>
-=======
 		<version>2.7.4</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
@@ -23,10 +13,12 @@
 	<version>0.0.1</version>
 	<name>recommovie</name>
 	<description>movie recommending web service</description>
->>>>>>> b180af7e0409ba9951440722d21639cc9a97a1ab
 	<properties>
-		<java.version>17</java.version>
+		<java.version>1.8</java.version>
+		<maven.compiler.source>1.8</maven.compiler.source>
+  		<maven.compiler.target>1.8</maven.compiler.target>
 	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -63,15 +55,21 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-<<<<<<< HEAD
-=======
 
 		<dependency>
 		    <groupId>org.jsoup</groupId>
 		    <artifactId>jsoup</artifactId>
 		</dependency>
+<<<<<<< HEAD
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>2.9.0</version>
+		</dependency>
+
+=======
 		
->>>>>>> b180af7e0409ba9951440722d21639cc9a97a1ab
+>>>>>>> 박진경
 	</dependencies>
 
 	<build>
@@ -91,8 +89,6 @@
 		</plugins>
 	</build>
 
-<<<<<<< HEAD
-=======
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -102,5 +98,4 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
->>>>>>> b180af7e0409ba9951440722d21639cc9a97a1ab
 </project>

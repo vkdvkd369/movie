@@ -62,6 +62,7 @@
 			WHERE m.movieTitle=#{movieTitle};
 	</select>
 	
+<<<<<<< HEAD
 	<select id="selectMovieByMoviecode" resultMap = "MovieMap">
 		SELECT m.*, mP.personId, p.personName, p.personPosition
 			FROM movies m
@@ -70,4 +71,6 @@
 			WHERE m.movieCode = {#movieCode}
 	</select>
 	
+=======
+>>>>>>> b180af7e0409ba9951440722d21639cc9a97a1ab
 </mapper>

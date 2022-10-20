@@ -31,8 +31,3 @@ build/
 
 ### VS Code ###
 .vscode/
-<<<<<<< HEAD
-=======
-
-bin/
->>>>>>> b180af7e0409ba9951440722d21639cc9a97a1ab
