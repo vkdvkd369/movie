@@ -3,6 +3,13 @@ from konlpy.tag import Okt
 from sklearn.metrics.pairwise import cosine_similarity
 import joblib
 
+
+# 터미널에 python sentiment_Api.py 로 실행.
+# 1. 의존성 패키지가 설치되어 있는지 확인할 것. anaconda 사용 시, 의존성 패키지가 설치된 가상환경을 activate 한 뒤에 실행
+# 2. joblib이 로드하는 pkl파일이 저장되어 있는 Path 확인할 것.
+# 2. python 3.8, joblib 1.2.0, konlpy 0.6.0, sklearn 1.1.2, flask 2.1.3  jpype1 1.4.0 
+
+
 app = Flask(__name__)
 
 
@@ -11,6 +18,7 @@ def tw_tokenizer(text):
     tokens_ko = twitter.morphs(text)
     return tokens_ko
 
+okt_tokenizer=tw_tokenizer
 
 # json REST Flask API
 @app.route('/sentiment/predict', methods=['POST'])
@@ -47,11 +55,15 @@ def predict():
 
 @app.route('/similar/predict', methods=['POST'])
 def predict_similar():
-    tfidf_vect = joblib.load("../model/outputs/similar_tfidf_vect.pkl")
-    tfidf_matrix_train = joblib.load('../model/outputs/similar_tfidf_matrix_train.pkl')
-    title_to_index = joblib.load('../model/outputs/similar_title_to_index.pkl')
-    index_to_title = joblib.load('../model/outputs/similar_index_to_title.pkl')
-    tfidf_matrix_story = tfidf_vect.transform([story])    # 길이가 길면 []해야함
+    tfidf_vect = joblib.load("../outputs/similar_tfidf_vect.pkl")
+    tfidf_matrix_train = joblib.load('../outputs/similar_tfidf_matrix_train.pkl')
+    title_to_index = joblib.load('../outputs/similar_title_to_index.pkl')
+    index_to_title = joblib.load('../outputs/similar_index_to_title.pkl')
+
+    # get movieStory string data from request
+    data = request.get_json("movieStory")
+
+    tfidf_matrix_story = tfidf_vect.transform([data['movieStory']])    # 길이가 길면 []해야함
     # data줄거리랑 영화 전체 줄거리 유사도
     cosine_sim = cosine_similarity(tfidf_matrix_story, tfidf_matrix_train)
     # 해당 영화와 모든 영화와의 유사도를 가져온다.
@@ -70,13 +82,8 @@ def predict_similar():
       movie_name.append(index_to_title[i])
 
     send={}
-    for i,mn, ms in range(len(movie_name)),zip(movie_name, movie_scores):
-      send[mn] = ms
-
-
-    # # 데이터 프레임 형식으로
-    # result_df = pd.DataFrame(data = movie_name, index = range(1,11), columns=['title'] )
-    # result_df['score'] = movie_scores
+    for i,mn, ms in zip(range(len(movie_name)),movie_name, movie_scores):
+        send[i]= {"title" : mn, "score" : ms}
 
     return send
 
