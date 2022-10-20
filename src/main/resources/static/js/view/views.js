@@ -103,28 +103,27 @@ all_items.forEach(function(item){
         }
     })});
 
-// if "complete"Id button is clicked, then the selected items are sent to the server using ajax.
-document.getElementById("complete").addEventListener("click", function(){
+
+document.getElementById("complete").addEventListener("click", function(e){
+    e.preventDefault();
+    // append selected items to sendForm
+    let sendForm = document.getElementById("sendForm");
     let selected_Items = document.querySelectorAll(".view_item.selected");
-    let num = selected_Items.length;
-    if(num == 0){
+    selected_Items.forEach(function(item){
+        let input = document.createElement("input");
+        input.type = "hidden";
+        input.name = "movieId";
+        input.value = item.getElementsByClassName("movieId")[0].value;
+        sendForm.append(input);
+    });
+    console.log(sendForm)
+
+    //if selected items are not empty, submit, else alert
+    if(selected_Items.length != 0){
+        sendForm.submit();
+    }
+    else{
         alert("선택된 항목이 없습니다.");
-    }else{
-        let ids = [];
-        selected_Items.forEach(function(item){
-            ids.push(item.getElementsByClassName("movieId")[0].value);
-        });
-        console.log(JSON.stringify({"ids": ids}));
-        $.ajax({
-            type: "POST",
-            url: "/recommend/resultSelect.do",
-            headers:{'Content-Type': 'application/json'},
-            data: JSON.stringify({"ids": ids}),
-            success: function(response){
-                //move response page
-                
-            }
-        })
     }
 });
 

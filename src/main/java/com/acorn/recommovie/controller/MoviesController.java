@@ -1,39 +1,29 @@
 package com.acorn.recommovie.controller;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-import java.util.Map.Entry;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
 import org.jsoup.*;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.TransientDataAccessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 import com.acorn.recommovie.dto.Genre;
 import com.acorn.recommovie.dto.Movie;
+import com.acorn.recommovie.dto.MovieId;
 import com.acorn.recommovie.mapper.MoviesMapper;
 import java.io.FileWriter;
 import java.io.FileReader;
@@ -99,14 +89,14 @@ public class MoviesController {
 	@GetMapping("resultSelect")
 	public void resultSelect() {}
 	
-	//검색된 목록 중 선택된 영화들의 Movie DTO가 list로 넘어오도록 함
+	//get form data not using dto by list
 	@PostMapping("resultSelect.do")
-	public String sentimentAnalysis(@RequestBody Map<String,List<String>> ids,Model model ) throws IOException {
+	public String sentimentAnalysis(@RequestParam String[] movieId,Model model ) throws IOException {
 		//test mapping
 		//List<Movie> selectedMovies = moviesMapper.selectMovieByTitle("포켓몬");
 		List<Movie> selectedMovies = new ArrayList<Movie>();
 
-		for(String id : ids.get("ids")) {
+		for(String id : movieId) {
 			
 			selectedMovies.add(moviesMapper.selectMovieById(Integer.parseInt(id)));
 		}
@@ -184,87 +174,30 @@ public class MoviesController {
 		
 		model.addAttribute("rst", sendMovies);
 
-		return "redirect:/recommend/result";
+		return "recommend/result";
+
 	}
 
-		
-		
-		
-
-	
 	@GetMapping("result")
 	public void result() {}
-	
-	@GetMapping("OptionDetail")
-	
-	public void OptionDetail() {}
-	
-	
-	
-	@GetMapping("/similarResult") 
-	public void similarResult() {}
-//	public Movie selectMovieByMoviecode( @PathVariable int movieCode, Model model) {
-//		Movie mainmovie = moviesMapper.selectMovieByMoviecode(movieCode);
-//		
-//		return mainmovie;
-		
-//	}
-	
-	
-	@PostMapping("/similarResult.do")
-//	public void similalrAnalysis( String title, Model model) throws IOException{
-//		HashMap<String, String> mainMovie = new HashMap<>();
-//		mainMovie.put("title", title);
-//		
-//	}
-	public String similarAnalysis(@RequestBody int movieCode, Model model) throws IOException{
-		List<Movie> mainMovie = new ArrayList<Movie>();
-		
-		mainMovie.add(moviesMapper.selectMovieByMoviecode(movieCode));
-		
-		HashMap<String, Object> main_Movie = new HashMap<>();
-		main_Movie.put("mainMovie", mainMovie);
-		
-		// title 만 받을 경우 
-		// mainTitle.add(moviesMapper.selectTitleByMoviecode(movieCode));
-		// HashMap<String, String> mainTitle = new HashMap<>();
-		// mainTitle.put("title", mainTitle)
-		
-		
-		RestTemplate restTemplate = new RestTemplate();
-		String apiURL = "http://localhost:8081/similar/predict"; // 추후 변경
-		
-		ResponseEntity<String> response = restTemplate.postForEntity(apiURL, main_Movie, String.class);
-		String result = response.getBody();
-		
-		FileWriter fw = new FileWriter("data");
-		fw.write(result);
-		fw.flush();
-		fw.close();
-		
-		FileReader fr = new FileReader("data");
-		Gson gson = new Gson();
-		Map<String, Object> similarResultMap = gson.fromJson(fr, Map.class);
-		fr.close();
-		
-		//{"similarMovie":{1: 유사도1위 dto, 2:유사도 2위 dto ,---}}
-		List<HashMap<String,Object>> similarMovies = new ArrayList<>();
-		for(List<Object> ob : (List<List<Object>>)similarResultMap.get("similarMovie")) {
-			 HashMap <String, Object> similarDto = new HashMap<>();
-			 // 결과 map 만들기, 이미지 추가 해야됨
-			 	 
-		}
-		model.addAttribute("rst",similarMovies);
-		return "redirect:/recommend/result";
-		
-	}
-	
 
+	@GetMapping("/similarResult")
 	
-	
-	
-	
-	@GetMapping("gridView")
-	
-	public void gridView() {}
+	public void similarResult() {}
+
+
+	@PostMapping("similarResult.do")
+	public String similarAnalysis(@RequestParam int movieId, Model model){
+		String movieStory = moviesMapper.selectMovieStoryById(movieId);
+		RestTemplate restTemplate = new RestTemplate();
+		String apiURL ="http://localhost:8081/similar/predict";
+		ResponseEntity<String> response = restTemplate.postForEntity(apiURL, movieStory, String.class);
+		Gson gson = new Gson();
+		Map<String, Object> resultMap = gson.fromJson(response.getBody(), Map.class);
+		System.out.println(resultMap);
+		
+		Movie movie = moviesMapper.selectMovieById(movieId);
+		model.addAttribute("resultMap", resultMap);
+		return "recommend/similarResult";
+	}
 }

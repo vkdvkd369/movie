@@ -13,7 +13,7 @@ public interface MoviesMapper {
 	 List<Movie> selectMovieByTitle(String movieTitle);
 	 Movie selectMovieById(int movieId);
 	 List<Genre> selectAllGenre();
-	 
-	 Movie selectMovieByMoviecode(int movieCode);
+	 String selectMovieStoryById(int movieId);
+	 List<Movie> selectMovieByTitleEqual(String[] movieTitle);
 }
 
