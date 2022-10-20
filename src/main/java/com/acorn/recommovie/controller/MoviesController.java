@@ -15,15 +15,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 import com.acorn.recommovie.dto.Genre;
 import com.acorn.recommovie.dto.Movie;
-import com.acorn.recommovie.dto.MovieId;
 import com.acorn.recommovie.mapper.MoviesMapper;
 import java.io.FileWriter;
 import java.io.FileReader;
@@ -178,26 +175,44 @@ public class MoviesController {
 
 	}
 
+	@GetMapping("test")
+	public void test(){}
+
 	@GetMapping("result")
 	public void result() {}
 
-	@GetMapping("/similarResult")
-	
-	public void similarResult() {}
-
+	@GetMapping("similarResult")
+	public void similarResult(){}
 
 	@PostMapping("similarResult.do")
-	public String similarAnalysis(@RequestParam int movieId, Model model){
+	public String similarAnalysis(/* @RequestParam int movieId, */ Model model){
+		//test mapping
+		int movieId = 16995;
+
 		String movieStory = moviesMapper.selectMovieStoryById(movieId);
+		System.out.println(movieStory);
 		RestTemplate restTemplate = new RestTemplate();
 		String apiURL ="http://localhost:8081/similar/predict";
-		ResponseEntity<String> response = restTemplate.postForEntity(apiURL, movieStory, String.class);
-		Gson gson = new Gson();
-		Map<String, Object> resultMap = gson.fromJson(response.getBody(), Map.class);
-		System.out.println(resultMap);
+		HashMap<String,Object> request = new HashMap<>();
+		request.put("movieStory",movieStory);
+		ResponseEntity<String> response = restTemplate.postForEntity(apiURL, request, String.class);
+
 		
-		Movie movie = moviesMapper.selectMovieById(movieId);
-		model.addAttribute("resultMap", resultMap);
+		Gson gson = new Gson();
+		Map<String, Map<String,Object>> resultMap = gson.fromJson(response.getBody(), Map.class);
+		System.out.println(resultMap);
+		HashMap<String, Map<String,Object>> send = new HashMap<>();
+		for(Map.Entry<String,Map<String, Object>> entry : resultMap.entrySet()){
+			HashMap<String,Object> sendsub = new HashMap<>();
+			Movie movie = moviesMapper.selectMovieByTitleEqual(entry.getValue().get("title").toString());
+			sendsub.put("movie", movie);
+			sendsub.put("score", entry.getValue().get("score"));
+			sendsub.put("thumbURL", "https://movie.naver.com/movie/bi/mi/photoViewPopup.naver?movieCode="+movie.getMovieCode());
+			send.put(entry.getKey(), sendsub);
+		}
+		
+		model.addAttribute("send", send);
+		// send 형식: { "index" : {"score":0.918301105160158, "movie": moviedto } }
 		return "recommend/similarResult";
 	}
 }
