@@ -39,7 +39,7 @@ $('.autoCompleteTitle').autocomplete({
 	 }
 })
 
-('.autoCompleteName').autocomplete({
+$('#moviePeTe').autocomplete({
 	source : function(request, response) { //source: 입력시 보일 목록
 	     $.ajax({
 	           url : "/ajax/autocompleteName.do"  
@@ -74,6 +74,7 @@ $('.autoCompleteTitle').autocomplete({
 			console.log(ui.item.idx);
 	 }
 })
+
 
 
 document.getElementById("chkAir").addEventListener("change",(e)=>{
@@ -127,6 +128,8 @@ function checkDisableKey(form){   
 function OnInput(e){
 	e.value=e.value.replace(/[^A-Za-z가-힣ㄱ-ㅎ0-9]/ig, '')
 }
+
+
 
 // 옵션 선택 유효성
 function search_onclick(){

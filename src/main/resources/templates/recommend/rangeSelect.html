@@ -54,10 +54,10 @@
 									장르
 								</label>
 							</div>
-							<select class="form-select dab" aria-label="장르 선택" id="genrechoose" disabled>
+							<select class="form-select dab" aria-label="장르 선택" name="genreId" id="genrechoose" disabled>
 								<option disabled selected>장르 선택</option>
 								<th:block th:each="genre : ${allGenre}">
-									<option th:value="${genre.genreId}" th:text="${genre.genreName}" name="genrecheck" id="genChId"></option>
+									<option th:value="${genre.genreId}" th:text="${genre.genreName}" id="genChId"></option>
 								</th:block>
 							</select>
 						</div>
@@ -71,7 +71,7 @@
 									영화인
 								</label>
 							</div>
-							<input name="movie_person"  type="text" minlength="1" oninput="OnInput(this)" class="form-control dab autoCompleteName" aria-label="chkPeople" placeholder="출연, 감독..." id="moviePeTe" disabled>
+							<input name="personName"  type="text" minlength="1" oninput="OnInput(this)" class="form-control dab autoCompleteName" aria-label="chkPeople" placeholder="출연, 감독..." id="moviePeTe" disabled>
 						</div>
 						<div class="input-group mb-2">
 							<div class="input-group-text gap-2">

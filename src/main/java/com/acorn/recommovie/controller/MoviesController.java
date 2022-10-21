@@ -49,12 +49,12 @@ public class MoviesController {
 	}
 	
 	@PostMapping("rangeSelect.do")
-	public String rangeSelect(@RequestParam String movie_keyword,
-			@RequestParam String movie_person, Model model) {
+	public String rangeSelect(@RequestParam(required = false) String movie_keyword,
+			@RequestParam(required = false) String personName, @RequestParam(required = false) int genreId, Model model) {
+		System.out.println(movie_keyword+"\n"+ personName +"\n"+ String.valueOf(genreId));
 		List<Movie> movies = null;
 		try {
-			if()
-			movies = moviesMapper.selectMovieByTitle(movie_keyword);
+			movies = moviesMapper.selectMovie(movie_keyword, personName, (Integer)genreId);
 			
 		}catch (Exception e) {
 			e.printStackTrace();

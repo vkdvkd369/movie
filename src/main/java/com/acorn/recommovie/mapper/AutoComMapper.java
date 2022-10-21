@@ -8,6 +8,6 @@ import com.acorn.recommovie.dto.Person;
 
 @Mapper
 public interface AutoComMapper {
-	List<String> autocompleteByTitle(@Param("keyword")String keyword) throws Exception;
-	List<Person> autocompleteByName(String personName) throws Exception;
+	List<String> autocompleteByTitle(String movieTitle) throws Exception;
+	List<String> autocompleteByName(String personName) throws Exception;
 }
