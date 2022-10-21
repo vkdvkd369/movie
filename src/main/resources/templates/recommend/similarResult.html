@@ -2,13 +2,16 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>Similar Result</title>
 <link rel="stylesheet" href="/css/similarResult.css">
 </head>
 <body>
+	<script th:inline="javascript">
+		
+	</script>
 	<header th:insert="headerNav"></header>
 	<div class="head">
-        <h1 style="color: white;">유사도 결과</h1>
+        <h1 style="color: white;">선택한 영화</h1>
     </div>
     <div class="content">
         <div class="mainMovie">
@@ -50,42 +53,89 @@
             <h3 style="color:#fff;">비슷한 영화 추천</h3>
         </div>
         <div class="movieList">
-            <ol>
-            	<li>
-                    <!-- api data 형식
-                        HashMap "results" : {"mainMovie" : 메인영화Dto, "1": 유사도 1위 MovieDto, "2": 유사도 2위 MovieDto, "3" : 유사도 3위 MovieDto}-->
-                	<div class="detail">
-                        <div class="rank">
-                            <p>90%입니다</p>
-                        </div>
-                        <div class="poster2">
-                            <a href="#">사진</a>
-                        </div>
-                    </div>
-                </li>
-                <li>
-                	<div class="detail">
-                        <div class="rank">
-                            <p>80%입니다</p>
-                        </div>
-                        <div class="poster2">
-                            <a href="#">사진</a>
-                        </div>
-               		</div>
-                </li>
-                <li>
-                    <div class="detail">
-                        <div class="rank">
-                            <p>70%입니다</p>
-                        </div>
-                        <div class="poster2">
-                            <a href="#">사진</a>
-                        </div>
-                    </div>
-                </li>
-            </ol>
-        </div>
+        	<div class="detail">
+        		<div class="rank">
+	        		<p th:text="${send['0']['score']}"></p>
+	        		<p th:text="${send['0']['movieTitle']}"></p>
+	    		</div>
+	    		<div class="poster2">
+	                <img th:src="${send['0']['thumbURL']}">
+	            </div>
+        	</div>
+        	<div class="detail">
+        		<div class="rank">
+	        		<p th:text="${send['1']['score']}"></p>
+	    		</div>
+	    		<div class="poster2">
+	                <img th:src="${send['1']['thumbURL']}">
+	            </div>
+        	</div>
+        	<div class="detail">
+        		<div class="rank">
+	        		<p th:text="${send['2']['score']}"></p>
+	    		</div>
+	    		<div class="poster2">
+	                <img th:src="${send['2']['thumbURL']}">
+	            </div>
+        	</div>
+        	<div class="detail">
+        		<div class="rank">
+	        		<p th:text="${send['3']['score']}"></p>
+	    		</div>
+	    		<div class="poster2">
+	                <img th:src="${send['3']['thumbURL']}">
+	            </div>
+        	</div>
+        	<div class="detail">
+        		<div class="rank">
+	        		<p th:text="${send['4']['score']}"></p>
+	    		</div>
+	    		<div class="poster2">
+	                <img th:src="${send['4']['thumbURL']}">
+	            </div>
+        	</div>
+        	<div class="detail">
+        		<div class="rank">
+	        		<p th:text="${send['5']['score']}"></p>
+	    		</div>
+	    		<div class="poster2">
+	                <img th:src="${send['5']['thumbURL']}">
+	            </div>
+        	</div>
+        	<div class="detail">
+        		<div class="rank">
+	        		<p th:text="${send['6']['score']}"></p>
+	    		</div>
+	    		<div class="poster2">
+	                <img th:src="${send['6']['thumbURL']}">
+	            </div>
+        	</div>
+        	<div class="detail">
+        		<div class="rank">
+	        		<p th:text="${send['7']['score']}"></p>
+	    		</div>
+	    		<div class="poster2">
+	                <img th:src="${send['7']['thumbURL']}">
+	            </div>
+        	</div>
+        	<div class="detail">
+        		<div class="rank">
+	        		<p th:text="${send['8']['score']}"></p>
+	    		</div>
+	    		<div class="poster2">
+	                <img th:src="${send['8']['thumbURL']}">
+	            </div>
+        	</div>
+        	<div class="detail">
+        		<div class="rank">
+	        		<p th:text="${send['9']['score']}"></p>
+	    		</div>
+	    		<div class="poster2">
+	                <img th:src="${send['9']['thumbURL']}">
+	            </div>
+        	</div>
+        	
+        </div>		
     </div>
-	
 </body>
 </html>

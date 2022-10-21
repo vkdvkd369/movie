@@ -211,8 +211,8 @@ public class MoviesController {
 			send.put(entry.getKey(), sendsub);
 		}
 		
-		model.addAttribute("send", send);
-		// send 형식: { "index" : {"score":0.918301105160158, "movie": moviedto } }
+		model.addAttribute("send", send);;
+		// send 형식: { "index" : {"score":0.91830110516015, "movie": moviedto } }
 		return "recommend/similarResult";
 	}
 }

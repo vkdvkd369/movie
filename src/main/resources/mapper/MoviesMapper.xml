@@ -62,15 +62,4 @@
 			WHERE m.movieTitle=#{movieTitle};
 	</select>
 	
-<<<<<<< HEAD
-	<select id="selectMovieByMoviecode" resultMap = "MovieMap">
-		SELECT m.*, mP.personId, p.personName, p.personPosition
-			FROM movies m
-			LEFT JOIN moviePeople mP on m.movieId = mP.movieId
-			LEFT JOIN people p on mP.personId = p.personId
-			WHERE m.movieCode = {#movieCode}
-	</select>
-	
-=======
->>>>>>> b180af7e0409ba9951440722d21639cc9a97a1ab
 </mapper>
