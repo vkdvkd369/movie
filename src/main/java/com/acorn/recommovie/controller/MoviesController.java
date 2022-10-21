@@ -49,9 +49,11 @@ public class MoviesController {
 	}
 	
 	@PostMapping("rangeSelect.do")
-	public String rangeSelect(@RequestParam String movie_keyword, Model model) {
+	public String rangeSelect(@RequestParam String movie_keyword,
+			@RequestParam String movie_person, Model model) {
 		List<Movie> movies = null;
 		try {
+			if()
 			movies = moviesMapper.selectMovieByTitle(movie_keyword);
 			
 		}catch (Exception e) {

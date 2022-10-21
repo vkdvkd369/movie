@@ -15,5 +15,6 @@ public interface MoviesMapper {
 	 List<Genre> selectAllGenre();
 	 String selectMovieStoryById(int movieId);
 	 Movie selectMovieByTitleEqual(String movieTitle);
+	 List<Movie> selectMovieByPerson(String personName);
 }
 

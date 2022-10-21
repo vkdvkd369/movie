@@ -40,7 +40,7 @@
 					<form class="p-2" name="rangeSelectForm" action="/recommend/rangeSelect.do" method="post">
 						<div class="input-group mb-2">
 							<div class="input-group-text gap-2">
-								<input name="chkAir" class="form-check-input" type="checkbox" value="" id="chkAir" >
+								<input name="chkAir" class="form-check-input" type="checkbox" value="" id="chkAir">
 								<label class="form-check-label" for="chkAir">
 									현재 상영중
 								</label>
@@ -49,12 +49,12 @@
 	
 						<div class="input-group mb-2">
 							<div class="input-group-text gap-2">
-								<input name="chkGenre" class="form-check-input" type="checkbox" value="" id="chkGenre" onclick='checkDisableGen(this.form)'>
+								<input name="chkGenre" class="form-check-input dab" type="checkbox" value="" id="chkGenre" onclick='checkDisableGen(this.form)'>
 								<label class="form-check-label" for="chkGenre">
 									장르
 								</label>
 							</div>
-							<select class="form-select" aria-label="장르 선택" id="genrechoose" disabled>
+							<select class="form-select dab" aria-label="장르 선택" id="genrechoose" disabled>
 								<option disabled selected>장르 선택</option>
 								<th:block th:each="genre : ${allGenre}">
 									<option th:value="${genre.genreId}" th:text="${genre.genreName}" name="genrecheck" id="genChId"></option>
@@ -64,24 +64,24 @@
 	
 						<div class="input-group mb-2">
 							<div class="input-group-text gap-2">
-								<input class="form-check-input" type="checkbox" value=""
+								<input class="form-check-input dab" type="checkbox" value=""
 									aria-label="Checkbox for following text input" id="chkPeople"
 									name="moviePeCh" onClick="checkDisablePe(this.form)">
 								<label class="form-check-label" for="chkPeople">
 									영화인
 								</label>
 							</div>
-							<input name="moviePeTe"  type="text" minlength="1" oninput="OnInput(this)" class="form-control" aria-label="chkPeople" placeholder="출연, 감독..." id="moviePeTe" disabled>
+							<input name="movie_person"  type="text" minlength="1" oninput="OnInput(this)" class="form-control dab autoCompleteName" aria-label="chkPeople" placeholder="출연, 감독..." id="moviePeTe" disabled>
 						</div>
 						<div class="input-group mb-2">
 							<div class="input-group-text gap-2">
-								<input class="form-check-input" type="checkbox" value="" id="chkKeyword"
+								<input class="form-check-input dab" type="checkbox" value="" id="chkKeyword"
 									   onclick='checkDisableKey(this.form)'>
 								<label class="form-check-label" for="chkGenre">
 									키워드
 								</label>
 							</div>
-							<input type="text" minlength="1" oninput="OnInput(this)" id="autoComplete" name="movie_keyword" class="form-control" placeholder="영화 제목 키워드"
+							<input type="text" minlength="1" oninput="OnInput(this)" id="autoComplete" name="movie_keyword" class="form-control dab autoCompleteTitle" placeholder="영화 제목 키워드"
 								aria-label="movie_keyword" aria-describedby="btn-search" disabled>
 						</div>
 						<div>

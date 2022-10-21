@@ -9,5 +9,5 @@ import com.acorn.recommovie.dto.Person;
 @Mapper
 public interface AutoComMapper {
 	List<String> autocompleteByTitle(@Param("keyword")String keyword) throws Exception;
-	List<Person> autocompleteByPeople(String personName) throws Exception;
+	List<Person> autocompleteByName(String personName) throws Exception;
 }
