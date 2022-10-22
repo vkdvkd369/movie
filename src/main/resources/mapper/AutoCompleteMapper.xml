@@ -10,10 +10,10 @@
 		WHERE movieTitle like CONCAT('%',#{keyword},'%');
 	</select>
 	
-	<select id="autocompleteByPeople" parameterType="String" resultType="Person">
+	<select id="autocompleteByName" parameterType="String" resultType="String">
 		select personName
 		from people
-		where personName like '%'|| #{personName} || '%';
+		where personName like CONCAT('%',#{personName},'%');
 	</select>
 	
 </mapper>
