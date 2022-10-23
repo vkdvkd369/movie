@@ -209,12 +209,21 @@ public class MoviesController {
 			Movie movie = moviesMapper.selectMovieByTitleEqual(entry.getValue().get("title").toString());
 			sendsub.put("movie", movie);
 			sendsub.put("score", entry.getValue().get("score"));
-			sendsub.put("thumbURL", "https://movie.naver.com/movie/bi/mi/photoViewPopup.naver?movieCode="+movie.getMovieCode());
+//			sendsub.put("thumbURL", "https://movie.naver.com/movie/bi/mi/photoViewPopup.naver?movieCode="+movie.getMovieCode());
+//			send.put(entry.getKey(), sendsub);
+			String moviePageURL = "https://movie.naver.com/movie/bi/mi/basic.naver?code="+movie.getMovieCode();
+			Document page = null;
+			try {page = Jsoup.connect(moviePageURL).get();} catch (IOException e) {e.printStackTrace();}
+			Elements thumbImg = page.select(".poster > a > img");
+			String thumbURL = thumbImg.attr("src");
+			sendsub.put("thumbURL", thumbURL);
 			send.put(entry.getKey(), sendsub);
+			
 		}
 		
 		model.addAttribute("send", send);;
 		// send 형식: { "index" : {"score":0.91830110516015, "movie": moviedto } }
+		System.out.println(send); // send확인
 		return "recommend/similarResult";
 	}
 }

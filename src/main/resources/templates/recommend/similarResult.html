@@ -56,10 +56,11 @@
         	<div class="detail">
         		<div class="rank">
 	        		<p th:text="${send['0']['score']}"></p>
-	        		<p th:text="${send['0']['movieTitle']}"></p>
+	        		<p th:text="${send['0']['movie']['movieTitle']}"></p>
 	    		</div>
 	    		<div class="poster2">
-	                <img th:src="${send['0']['thumbURL']}">
+	               	<img th:src="${send['0']['thumbURL']}" width="400px" height="400px"> 
+	                <!-- <img src="https://movie-phinf.pstatic.net/20111221_148/1324471036322cnB1S_JPEG/movie_image.jpg" style="width: 100px; height:auto;">-->
 	            </div>
         	</div>
         	<div class="detail">
