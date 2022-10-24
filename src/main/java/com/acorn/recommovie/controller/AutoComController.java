@@ -14,8 +14,8 @@ public class AutoComController {
 	@Autowired
 	AutoComMapper autoComMapper;
 	
-	@PostMapping(value = "/ajax/autocomplete.do")
-	public @ResponseBody List<String> autocomplete
+	@PostMapping(value = "/ajax/autocompleteTitle.do")
+	public @ResponseBody List<String> autocompleteTitle
     						(String keyword) throws Exception{
 
 		if(keyword ==null)
@@ -25,9 +25,16 @@ public class AutoComController {
 			return resultList;
 		}
 			
-		
-		
-		
+	}
+	
+	@PostMapping("/ajax/autocompleteName.do")
+	public @ResponseBody List<String> autocompleteName(String keyword) throws Exception{
+		if(keyword ==null)
+			return null;
+		else {
+			List<String> resultList = autoComMapper.autocompleteByName(keyword);
+			return resultList;
+		}
 	}
 	
 }
