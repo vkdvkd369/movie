@@ -50,6 +50,7 @@
 		SELECT * FROM genre
 	</select>
 
+<<<<<<< HEAD:bin/src/main/resources/mapper/MoviesMapper.xml
 	<select id="selectMovieStoryById" resultType="string">
 		SELECT movieStory FROM movies WHERE movieId=#{movieId}
 	</select>
@@ -61,5 +62,10 @@
 			LEFT JOIN (SELECT mp.movieId, p.personId, p.personName, p.personPosition FROM moviePeople mp JOIN people p ON mp.personId=p.personId) mpjp ON m.movieId=mpjp.movieId
 			WHERE m.movieTitle=#{movieTitle};
 	</select>
+=======
+	<select id="selectMovieStoryById">
+		SELECT movieStory FROM movies WHERE movieId=#{movieId}
+	</select>
+>>>>>>> 8c99eef07bfb2c87922e75b4310c0387581547f9:src/main/resources/mapper/moviesMapper.xml
 	
 </mapper>

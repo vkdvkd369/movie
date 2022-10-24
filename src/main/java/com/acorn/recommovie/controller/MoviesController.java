@@ -177,6 +177,7 @@ public class MoviesController {
 
 	}
 
+
 	@GetMapping("test")
 	public void test(){}
 
@@ -217,4 +218,5 @@ public class MoviesController {
 		// send 형식: { "index" : {"score":0.918301105160158, "movie": moviedto } }
 		return "recommend/similarResult";
 	}
+
 }
