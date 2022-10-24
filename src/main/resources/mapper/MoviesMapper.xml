@@ -26,11 +26,11 @@
 	</resultMap>
 	
 
-	<select id="selectAllMovie" resultType="Movie">
+	<select id="selectAllMovies" resultType="Movie">
 		SELECT * FROM movies
 	</select>
 	
-	<select id="selectMovie" resultMap="MovieMap">
+	<select id="selectMovies" resultMap="MovieMap">
 		SELECT m.*, mgjg.genreId, mgjg.genreName, mpjp.personId, mpjp.personName, mpjp.personPosition
 			FROM movies m
 			LEFT JOIN (SELECT mg.movieId, g.genreId, g.genreName FROM movieGenre mg JOIN genre g ON mg.genreId=g.genreId) mgjg ON m.movieId=mgjg.movieId
@@ -49,7 +49,7 @@
 			</trim>
 	</select>
 	
-	<select id="selectAllGenre" resultMap="GenreMap">
+	<select id="selectAllGenres" resultMap="GenreMap">
 		SELECT * FROM genre
 	</select>
 
@@ -70,6 +70,14 @@
 			LEFT JOIN (SELECT mg.movieId, g.genreId, g.genreName FROM movieGenre mg JOIN genre g ON mg.genreId=g.genreId) mgjg ON m.movieId=mgjg.movieId
 			LEFT JOIN (SELECT mp.movieId, p.personId, p.personName, p.personPosition FROM moviePeople mp JOIN people p ON mp.personId=p.personId) mpjp ON m.movieId=mpjp.movieId
 			WHERE m.movieId=#{movieId};
+	</select>
+	
+	<select id="selectMovieByMoviecode" resultMap = "MovieMap">
+		SELECT m.*, mP.personId, p.personName, p.personPosition
+			FROM movies m
+			LEFT JOIN moviePeople mP on m.movieId = mP.movieId
+			LEFT JOIN people p on mP.personId = p.personId
+			WHERE m.movieCode = {#movieCode}
 	</select>
 	
 </mapper>
