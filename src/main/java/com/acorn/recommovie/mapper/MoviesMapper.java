@@ -9,10 +9,10 @@ import com.acorn.recommovie.dto.Movie;
 
 @Mapper
 public interface MoviesMapper {
-	 List<Movie> selectAllMovie();
-	 List<Movie> selectMovie(String movieTitle, String personName, Integer genreId);
+	 List<Movie> selectAllMovies();
+	 List<Movie> selectMovies(String movieTitle, String personName, Integer genreId);
 	 Movie selectMovieById(int movieId);
-	 List<Genre> selectAllGenre();
+	 List<Genre> selectAllGenres();
 	 String selectMovieStoryById(int movieId);
 	 Movie selectMovieByTitleEqual(String movieTitle);
 }

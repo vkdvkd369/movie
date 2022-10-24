@@ -40,7 +40,7 @@ public class MoviesController {
 
 		List<Genre> allGenre = null;
 		try {
-			allGenre = moviesMapper.selectAllGenre();
+			allGenre = moviesMapper.selectAllGenres();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -54,7 +54,7 @@ public class MoviesController {
 		System.out.println(movie_keyword+"\n"+ personName +"\n"+ String.valueOf(genreId));
 		List<Movie> movies = null;
 		try {
-			movies = moviesMapper.selectMovie(movie_keyword, personName, (Integer)genreId);
+			movies = moviesMapper.selectMovies(movie_keyword, personName, (Integer)genreId);
 			
 		}catch (Exception e) {
 			e.printStackTrace();

@@ -26,11 +26,11 @@
 	</resultMap>
 	
 
-	<select id="selectAllMovie" resultType="Movie">
+	<select id="selectAllMovies" resultType="Movie">
 		SELECT * FROM movies
 	</select>
 	
-	<select id="selectMovie" resultMap="MovieMap">
+	<select id="selectMovies" resultMap="MovieMap">
 		SELECT m.*, mgjg.genreId, mgjg.genreName, mpjp.personId, mpjp.personName, mpjp.personPosition
 			FROM movies m
 			LEFT JOIN (SELECT mg.movieId, g.genreId, g.genreName FROM movieGenre mg JOIN genre g ON mg.genreId=g.genreId) mgjg ON m.movieId=mgjg.movieId
@@ -49,7 +49,7 @@
 			</trim>
 	</select>
 	
-	<select id="selectAllGenre" resultMap="GenreMap">
+	<select id="selectAllGenres" resultMap="GenreMap">
 		SELECT * FROM genre
 	</select>
 
