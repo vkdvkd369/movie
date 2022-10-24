@@ -2,141 +2,266 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<style>
+	.panel-title {
+		font-size:20px;
+		font-weight:bold;
+	}
+	.panel-body{
+		padding:15px;
+		display:flex;
+		justify-content:center;
+	}
+	.poster{
+		margin-right : 10px;
+	}
+	
+	.tit {
+		font-size:20px;
+	}
+	dd {
+		font-size:16px;
+	}
+	img{
+		width: 120px;
+		height: 180px;
+	}
+	
+</style>
 <title>Similar Result</title>
-<link rel="stylesheet" href="/css/similarResult.css">
 </head>
 <body>
-	<script th:inline="javascript">
-		
-	</script>
-	<header th:insert="headerNav"></header>
-	<div class="head">
-        <h1 style="color: white;">선택한 영화</h1>
-    </div>
-    <div class="content">
-        <div class="mainMovie">
-            <div class="poster">
-                <a href="#">사진</a>
-            </div>
-            <dl class="lst_dsc">
-                <dt class="tit">
-                    <a href="#">제목</a>
-                </dt>
-                <dd>
-                    <dl class="info_txt1">
-                        <dt class="tit_t1">장르</dt>
-                        <dd>
-                            <span>장르1, 장르2</span>
-                        </dd>
-                        <dt class="tit_t2">감독</dt>
-                        <dd>
-                            <span class="link_txt">
-                                <a href="#">감독1</a>
-                            </span>
-                        </dd>
-                        <dt class="tit_t3">출연</dt>
-                        <dd>
-                            <span class="link_txt">
-                                <a href="#">배우1</a>
-                                <a href="#">배우2</a>
-                                <a href="#">배우3</a>
-                            </span>
-                        </dd>
-                    </dl>
-                </dd>
-            </dl>
-            
+
+<div class="container">
+  <h2 style="text-align:center;"><b>비슷한 영화 추천</b></h2>
+  <div class="panel-group" id="accordion">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">
+          <a data-toggle="collapse" data-parent="#accordion" href="#collapse1" th:text="'1위	|	' + ${send['0']['movie']['movieTitle']} + '	|	유사도 :	' + ${send['0']['score']}"></a>
+        </h3>
+      </div>
+      <div id="collapse1" class="panel-collapse collapse">
+        <div class="panel-body">
+       		<div class="poster">
+       			<img th:src="${send['0']['thumbURL']}">
+        	</div>
+        	<div class="detail">
+	        	<dl class="lst_dsc">
+	                <dt class="tit">제목</dt> 
+	                <dd><a th:href="@{https://movie.naver.com/movie/bi/mi/basic.naver(code=${send['0']['movie']['movieCode']})}" th:text="${send['0']['movie']['movieTitle']}"></a></dd> 
+	                <dt class="tit">줄거리</dt>
+	                <dd th:text="${send['0']['movie']['movieStory']}"></dd>       
+		        </dl>
+        	</div>	
         </div>
+      </div>
     </div>
-    <div class="list">
-        <div class="movieList" style="margin-bottom: 10px; background-color: black;">
-            <h3 style="color:#fff;">비슷한 영화 추천</h3>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">
+          <a data-toggle="collapse" data-parent="#accordion" href="#collapse2" th:text="'2위	|	' + ${send['1']['movie']['movieTitle']} + '	|	유사도 :	' + ${send['1']['score']}"></a>
+        </h3>
+      </div>
+      <div id="collapse2" class="panel-collapse collapse">
+        <div class="panel-body">
+       		<div class="poster">
+       			<img th:src="${send['1']['thumbURL']}">
+        	</div>
+        	<div class="detail">
+	        	<dl class="lst_dsc">
+	                <dt class="tit">제목</dt> 
+	                <dd><a th:href="@{https://movie.naver.com/movie/bi/mi/basic.naver(code=${send['1']['movie']['movieCode']})}" th:text="${send['1']['movie']['movieTitle']}"></a></dd> 
+	                <dt class="tit">줄거리</dt>
+	                <dd th:text="${send['1']['movie']['movieStory']}"></dd>       
+		        </dl>
+        	</div>
         </div>
-        <div class="movieList">
-        	<div class="detail">
-        		<div class="rank">
-	        		<p th:text="${send['0']['score']}"></p>
-	        		<p th:text="${send['0']['movie']['movieTitle']}"></p>
-	    		</div>
-	    		<div class="poster2">
-	               	<img th:src="${send['0']['thumbURL']}" width="400px" height="400px"> 
-	                <!-- <img src="https://movie-phinf.pstatic.net/20111221_148/1324471036322cnB1S_JPEG/movie_image.jpg" style="width: 100px; height:auto;">-->
-	            </div>
-        	</div>
-        	<div class="detail">
-        		<div class="rank">
-	        		<p th:text="${send['1']['score']}"></p>
-	    		</div>
-	    		<div class="poster2">
-	                <img th:src="${send['1']['thumbURL']}">
-	            </div>
-        	</div>
-        	<div class="detail">
-        		<div class="rank">
-	        		<p th:text="${send['2']['score']}"></p>
-	    		</div>
-	    		<div class="poster2">
-	                <img th:src="${send['2']['thumbURL']}">
-	            </div>
-        	</div>
-        	<div class="detail">
-        		<div class="rank">
-	        		<p th:text="${send['3']['score']}"></p>
-	    		</div>
-	    		<div class="poster2">
-	                <img th:src="${send['3']['thumbURL']}">
-	            </div>
-        	</div>
-        	<div class="detail">
-        		<div class="rank">
-	        		<p th:text="${send['4']['score']}"></p>
-	    		</div>
-	    		<div class="poster2">
-	                <img th:src="${send['4']['thumbURL']}">
-	            </div>
-        	</div>
-        	<div class="detail">
-        		<div class="rank">
-	        		<p th:text="${send['5']['score']}"></p>
-	    		</div>
-	    		<div class="poster2">
-	                <img th:src="${send['5']['thumbURL']}">
-	            </div>
-        	</div>
-        	<div class="detail">
-        		<div class="rank">
-	        		<p th:text="${send['6']['score']}"></p>
-	    		</div>
-	    		<div class="poster2">
-	                <img th:src="${send['6']['thumbURL']}">
-	            </div>
-        	</div>
-        	<div class="detail">
-        		<div class="rank">
-	        		<p th:text="${send['7']['score']}"></p>
-	    		</div>
-	    		<div class="poster2">
-	                <img th:src="${send['7']['thumbURL']}">
-	            </div>
-        	</div>
-        	<div class="detail">
-        		<div class="rank">
-	        		<p th:text="${send['8']['score']}"></p>
-	    		</div>
-	    		<div class="poster2">
-	                <img th:src="${send['8']['thumbURL']}">
-	            </div>
-        	</div>
-        	<div class="detail">
-        		<div class="rank">
-	        		<p th:text="${send['9']['score']}"></p>
-	    		</div>
-	    		<div class="poster2">
-	                <img th:src="${send['9']['thumbURL']}">
-	            </div>
-        	</div>
-        	
-        </div>		
+      </div>
     </div>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">
+          <a data-toggle="collapse" data-parent="#accordion" href="#collapse3" th:text="'3위	|	' + ${send['2']['movie']['movieTitle']} + '	|	유사도 :	' + ${send['2']['score']}"></a>
+        </h3>
+      </div>
+      <div id="collapse3" class="panel-collapse collapse">
+        <div class="panel-body">
+       		<div class="poster">
+       			<img th:src="${send['2']['thumbURL']}">
+        	</div>
+        	<div class="detail">
+	        	<dl class="lst_dsc">
+	                <dt class="tit">제목</dt> 
+	                <dd><a th:href="@{https://movie.naver.com/movie/bi/mi/basic.naver(code=${send['2']['movie']['movieCode']})}" th:text="${send['2']['movie']['movieTitle']}"></a></dd> 
+	                <dt class="tit">줄거리</dt>
+	                <dd th:text="${send['2']['movie']['movieStory']}"></dd>       
+		        </dl>
+        	</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">
+          <a data-toggle="collapse" data-parent="#accordion" href="#collapse4" th:text="'4위	|	' + ${send['3']['movie']['movieTitle']} + '	|	유사도 :	' + ${send['3']['score']}"></a>
+        </h3>
+      </div>
+      <div id="collapse4" class="panel-collapse collapse">
+        <div class="panel-body">
+       		<div class="poster">
+       			<img th:src="${send['3']['thumbURL']}">
+        	</div>
+        	<div class="detail">
+	        	<dl class="lst_dsc">
+	                <dt class="tit">제목</dt> 
+	                <dd><a th:href="@{https://movie.naver.com/movie/bi/mi/basic.naver(code=${send['3']['movie']['movieCode']})}" th:text="${send['3']['movie']['movieTitle']}"></a></dd> 
+	                <dt class="tit">줄거리</dt>
+	                <dd th:text="${send['3']['movie']['movieStory']}"></dd>       
+		        </dl>
+        	</div>
+        </div>
+      </div>
+    </div>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">
+          <a data-toggle="collapse" data-parent="#accordion" href="#collapse5" th:text="'5위	|	' + ${send['4']['movie']['movieTitle']} + '	|	유사도 :	' + ${send['4']['score']}"></a>
+        </h3>
+      </div>
+      <div id="collapse5" class="panel-collapse collapse">
+        <div class="panel-body">
+       		<div class="poster">
+       			<img th:src="${send['4']['thumbURL']}">
+        	</div>
+        	<div class="detail">
+	        	<dl class="lst_dsc">
+	                <dt class="tit">제목</dt> 
+	                <dd><a th:href="@{https://movie.naver.com/movie/bi/mi/basic.naver(code=${send['4']['movie']['movieCode']})}" th:text="${send['4']['movie']['movieTitle']}"></a></dd> 
+	                <dt class="tit">줄거리</dt>
+	                <dd th:text="${send['4']['movie']['movieStory']}"></dd>       
+		        </dl>
+        	</div>
+        </div>
+      </div>
+    </div>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">
+          <a data-toggle="collapse" data-parent="#accordion" href="#collapse6" th:text="'6위	|	' + ${send['5']['movie']['movieTitle']} + '	|	유사도 :	' + ${send['5']['score']}"></a>
+        </h3>
+      </div>
+      <div id="collapse6" class="panel-collapse collapse">
+        <div class="panel-body">
+       		<div class="poster">
+       			<img th:src="${send['5']['thumbURL']}">
+        	</div>
+        	<div class="detail">
+	        	<dl class="lst_dsc">
+	                <dt class="tit">제목</dt> 
+	                <dd><a th:href="@{https://movie.naver.com/movie/bi/mi/basic.naver(code=${send['5']['movie']['movieCode']})}" th:text="${send['5']['movie']['movieTitle']}"></a></dd> 
+	                <dt class="tit">줄거리</dt>
+	                <dd th:text="${send['5']['movie']['movieStory']}"></dd>       
+		        </dl>
+        	</div>
+        </div>
+      </div>
+    </div>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">
+          <a data-toggle="collapse" data-parent="#accordion" href="#collapse7" th:text="'7위	|	' + ${send['6']['movie']['movieTitle']} + '	|	유사도 :	' + ${send['6']['score']}"></a>
+        </h3>
+      </div>
+      <div id="collapse7" class="panel-collapse collapse">
+        <div class="panel-body">
+       		<div class="poster">
+       			<img th:src="${send['6']['thumbURL']}">
+        	</div>
+        	<div class="detail">
+	        	<dl class="lst_dsc">
+	                <dt class="tit">제목</dt> 
+	                <dd><a th:href="@{https://movie.naver.com/movie/bi/mi/basic.naver(code=${send['6']['movie']['movieCode']})}" th:text="${send['6']['movie']['movieTitle']}"></a></dd> 
+	                <dt class="tit">줄거리</dt>
+	                <dd th:text="${send['6']['movie']['movieStory']}"></dd>       
+		        </dl>
+        	</div>
+        </div>
+      </div>
+    </div>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">
+          <a data-toggle="collapse" data-parent="#accordion" href="#collapse8" th:text="'8위	|	' + ${send['7']['movie']['movieTitle']} + '	|	유사도 :	' + ${send['7']['score']}"></a>
+        </h3>
+      </div>
+      <div id="collapse8" class="panel-collapse collapse">
+        <div class="panel-body">
+       		<div class="poster">
+       			<img th:src="${send['7']['thumbURL']}">
+        	</div>
+        	<div class="detail">
+	        	<dl class="lst_dsc">
+	                <dt class="tit">제목</dt> 
+	                <dd><a th:href="@{https://movie.naver.com/movie/bi/mi/basic.naver(code=${send['7']['movie']['movieCode']})}" th:text="${send['7']['movie']['movieTitle']}"></a></dd> 
+	                <dt class="tit">줄거리</dt>
+	                <dd th:text="${send['7']['movie']['movieStory']}"></dd>       
+		        </dl>
+        	</div>
+        </div>
+      </div>
+    </div>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">
+          <a data-toggle="collapse" data-parent="#accordion" href="#collapse9" th:text="'9위	|	' + ${send['8']['movie']['movieTitle']} + '	|	유사도 :	' + ${send['8']['score']}"></a>
+        </h3>
+      </div>
+      <div id="collapse9" class="panel-collapse collapse">
+        <div class="panel-body">
+       		<div class="poster">
+       			<img th:src="${send['8']['thumbURL']}">
+        	</div>
+        	<div class="detail">
+	        	<dl class="lst_dsc">
+	                <dt class="tit">제목</dt> 
+	                <dd><a th:href="@{https://movie.naver.com/movie/bi/mi/basic.naver(code=${send['8']['movie']['movieCode']})}" th:text="${send['8']['movie']['movieTitle']}"></a></dd> 
+	                <dt class="tit">줄거리</dt>
+	                <dd th:text="${send['8']['movie']['movieStory']}"></dd>       
+		        </dl>
+        	</div>
+        </div>
+      </div>
+    </div>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">
+          <a data-toggle="collapse" data-parent="#accordion" href="#collapse10" th:text="'10위 |	' + ${send['9']['movie']['movieTitle']} + '	|	유사도 :	' + ${send['9']['score']}"></a>
+        </h3>
+      </div>
+      <div id="collapse10" class="panel-collapse collapse">
+        <div class="panel-body">
+       		<div class="poster">
+       			<img th:src="${send['9']['thumbURL']}">
+        	</div>
+        	<div class="detail">
+	        	<dl class="lst_dsc">
+	                <dt class="tit">제목</dt> 
+	                <dd><a th:href="@{https://movie.naver.com/movie/bi/mi/basic.naver(code=${send['9']['movie']['movieCode']})}" th:text="${send['9']['movie']['movieTitle']}"></a></dd> 
+	                <dt class="tit">줄거리</dt>
+	                <dd th:text="${send['9']['movie']['movieStory']}"></dd>       
+		        </dl>
+        	</div>
+        </div>
+      </div>
+    </div>
+  </div> 
+</div>
+
+
 </body>
 </html>
