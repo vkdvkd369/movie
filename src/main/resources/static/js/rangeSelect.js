@@ -3,7 +3,7 @@ rsForm=document.forms.rangeSelectForm;
 rsForm;
 
 // 자동 완성
-$('.autoCompleteTitle').autocomplete({
+$('#movieKeyword').autocomplete({
 	source : function(request, response) { //source: 입력시 보일 목록
 	     $.ajax({
 	           url : "/ajax/autocompleteTitle.do"  
@@ -39,7 +39,7 @@ $('.autoCompleteTitle').autocomplete({
 	 }
 })
 
-$('#moviePeTe').autocomplete({
+$('#personName').autocomplete({
 	source : function(request, response) { //source: 입력시 보일 목록
 	     $.ajax({
 	           url : "/ajax/autocompleteName.do"  
@@ -77,215 +77,86 @@ $('#moviePeTe').autocomplete({
 
 
 
-document.getElementById("chkAir").addEventListener("change",(e)=>{
+document.forms.rangeSelectForm.chkAir.addEventListener("click",(e)=>{
 	const allInput = document.getElementsByClassName("dab");
 	for(item of allInput){
-		item.disabled = e.target.checked;
+		if(item.type!="checkbox"){
+			item.disabled != e.target.checked;
+		}
+		else{
+			item.disabled = e.target.checked;
+		}
 	}
+	
+
+	
 })
 	
-
-
-//  장르 체크박스 여부에 따라 활성화/비활성화
-function checkDisableGen(form){    
-	const textboxGen_elem = document.getElementById('genrechoose');
-	textboxGen_elem.disabled = chkGenre.checked ? false : true;
+document.forms.rangeSelectForm.chkKeyword.addEventListener("click",(e)=>{
+	if(e.target.checked){
+		document.forms.rangeSelectForm.movieKeyword.disabled = false;
+		document.forms.rangeSelectForm.movieKeyword.focus();
+	}else{
+		document.forms.rangeSelectForm.movieKeyword.disabled = true;
+		document.forms.rangeSelectForm.movieKeyword.value = null;
+	}
+});
 	
- 	if(textboxGen_elem.disabled) {
- 	// - 텍스트박스가 비활성화 된 경우 : 텍스트박스 초기화
-	  	textboxGen_elem.value = "장르 선택";
-  	}else{
-  	// - 텍스트박스가 활성화 된 경우 : 포커스 이동
-	  	textboxGen_elem.focus();
-  	}
- }
- 	
-//  영화인 체크박스 여부에 따라 활성화/비활성화
-function checkDisablePe(form) {
-	  const textboxPe_elem = document.getElementById('moviePeTe');
-	  textboxPe_elem.disabled = chkPeople.checked ? false : true;
-	  
-	  if(textboxPe_elem.disabled) {
-		  textboxPe_elem.value = null;
-	  }else{
-		  textboxPe_elem.focus();
-	  }
-}
+document.forms.rangeSelectForm.chkPerson.addEventListener("click",(e)=>{
+	if(e.target.checked){
+		document.forms.rangeSelectForm.personName.disabled = false;
+		document.forms.rangeSelectForm.personName.focus();
+	}else{
+		document.forms.rangeSelectForm.personName.disabled = true;
+		document.forms.rangeSelectForm.personName.value = null;
+	}
+});
 
-//  키워드 체크박스 여부에 따라 활성화/비활성화
-function checkDisableKey(form){    
-	const textboxKey_elem = document.getElementById('autoComplete');
-	textboxKey_elem.disabled = chkKeyword.checked ? false : true;
-	
- 	if(textboxKey_elem.disabled) {
-	  	textboxKey_elem.value = null;
-  	}else{
-	  	textboxKey_elem.focus();
-  	}
- }
+document.forms.rangeSelectForm.chkGenre.addEventListener("click",(e)=>{
+	if(e.target.checked){
+		document.forms.rangeSelectForm.genreId.disabled = false;
+		document.forms.rangeSelectForm.genreId.focus();
+	}else{
+		document.forms.rangeSelectForm.genreId.disabled = true;
+		document.forms.rangeSelectForm.genreId.value = "-1";
+	}
+});
 	
 // input text 숫자, 영어(대소문자), 한글(중성 제외)만
 function OnInput(e){
 	e.value=e.value.replace(/[^A-Za-z가-힣ㄱ-ㅎ0-9]/ig, '')
 }
 
-
-
 // 옵션 선택 유효성
-function search_onclick(){
-	theForm=document.rangeSelectForm;
-	
-	// 전체 체크 x	
-	if(theForm.chkAir.checked!=true && theForm.chkGenre.checked!=true && theForm.chkPeople.checked!=true && 
-			theForm.chkKeyword.checked!=true){
-		alert("옵션을 선택해 주세요.");
-		event.preventDefault();
-	} 
-	
-	// 장르
-	if(theForm.chkAir.checked!=true && theForm.chkGenre.checked!=false && theForm.chkPeople.checked!=true && 
-			theForm.chkKeyword.checked!=true && theForm.genrechoose.value=="장르 선택"){
-		alert("장르를 선택해 주세요.");
-		event.preventDefault();
-	} 
-	
-	// 현재상영중, 장르
-	else if(theForm.chkPeople.checked!=true && theForm.chkAir.checked!=false && theForm.chkGenre.checked!=false && 
-			theForm.chkKeyword.checked!=true && theForm.genrechoose.value=="장르 선택"){
-		alert("장르를 선택해 주세요.");
-		event.preventDefault();
+document.getElementById("btn").addEventListener("click", (e)=>{
+	e.preventDefault();
+	if(!(rangeSelectForm.chkAir.checked || rangeSelectForm.chkGenre.checked+rangeSelectForm.chkKeyword.checked+rangeSelectForm.chkPerson.checked)){
+		alert("검색 조건을 선택해주세요");
+		return;
 	}
-	
-	// 현재상영중, 장르, 영화인
-	else if(theForm.chkPeople.checked!=false && theForm.chkAir.checked!=false && 
-			theForm.chkGenre.checked!=false && theForm.chkKeyword.checked!=true && theForm.genrechoose.value=="장르 선택"){
-		alert("장르를 선택해 주세요.");
-		event.preventDefault();
-	}
-	else if(theForm.chkPeople.checked!=false && theForm.chkAir.checked!=false && 
-			theForm.chkGenre.checked!=false && theForm.chkKeyword.checked!=true && theForm.moviePeTe.value==""){ 
-		alert("영화인을 작성해 주세요.");
-		document.getElementById("moviePeTe").focus();
-		event.preventDefault();
-	}
-	
-	// 장르, 영화인, 키워드
-	else if(theForm.chkPeople.checked!=false && theForm.chkAir.checked!=true && theForm.chkGenre.checked!=false && 
-			theForm.chkKeyword.checked!=false && theForm.genrechoose.value=="장르 선택"){
-		alert("장르를 선택해 주세요.");
-		event.preventDefault();
-	}
-	else if(theForm.chkPeople.checked!=false && theForm.chkAir.checked!=true && 
-			theForm.chkGenre.checked!=false && theForm.chkKeyword.checked!=false && theForm.moviePeTe.value==""){ // 
-		alert("영화인을 작성해 주세요.");
-		document.getElementById("moviePeTe").focus();
-		event.preventDefault();
-	}
-	else if(theForm.chkPeople.checked!=false && theForm.chkAir.checked!=true && 
-			theForm.chkGenre.checked!=false && theForm.chkKeyword.checked!=false && theForm.autoComplete.value==""){ // 
-		alert("키워드를 작성해 주세요.");
-		document.getElementById("autoComplete").focus();
-		event.preventDefault();
-	}
-	
-	// 영화인, 키워드
-	else if(theForm.chkPeople.checked!=false && theForm.chkAir.checked!=true && 
-			theForm.chkGenre.checked!=true && theForm.chkKeyword.checked!=false && theForm.moviePeTe.value==""){ // 
-		alert("영화인을 작성해 주세요.");
-		document.getElementById("moviePeTe").focus();
-		event.preventDefault();
-	}
-	else if(theForm.chkPeople.checked!=false && theForm.chkAir.checked!=true && 
-			theForm.chkGenre.checked!=true && theForm.chkKeyword.checked!=false && theForm.autoComplete.value==""){ // 
-		alert("키워드를 작성해 주세요.");
-		document.getElementById("autoComplete").focus();
-		event.preventDefault();
-	}
-	
-	// 현재상영중, 장르, 영화인, 키워드
-	else if(theForm.chkPeople.checked!=false && theForm.chkAir.checked!=false && theForm.chkGenre.checked!=false && 
-			theForm.chkKeyword.checked!=false && theForm.genrechoose.value=="장르 선택"){
-		alert("장르를 선택해 주세요.");
-		event.preventDefault();
-	}
-	else if(theForm.chkPeople.checked!=false && theForm.chkAir.checked!=false && 
-			theForm.chkGenre.checked!=false && theForm.chkKeyword.checked!=false && theForm.moviePeTe.value==""){ // 
-		alert("영화인을 작성해 주세요.");
-		document.getElementById("moviePeTe").focus();
-		event.preventDefault();
-	}
-	else if(theForm.chkPeople.checked!=false && theForm.chkAir.checked!=false && 
-			theForm.chkGenre.checked!=false && theForm.chkKeyword.checked!=false && theForm.autoComplete.value==""){ // 
-		alert("키워드를 작성해 주세요.");
-		document.getElementById("autoComplete").focus();
-		event.preventDefault();
-	}
-	
-	// 영화인
-	else if(theForm.chkPeople.checked=true && theForm.chkAir.checked!=true && theForm.chkGenre.checked!=true && 
-			theForm.chkKeyword.checked!=true && theForm.moviePeTe.value==""){
-		alert("영화인을 작성해 주세요.");
-		document.getElementById("moviePeTe").focus();
-		event.preventDefault();
-	}
-	
-	// 장르, 영화인
-	else if(theForm.chkPeople.checked!=false && theForm.chkAir.checked!=true && theForm.chkGenre.checked!=false && 
-			theForm.chkKeyword.checked!=true && theForm.genrechoose.value=="장르 선택"){
-		alert("장르를 선택해 주세요.");
-		event.preventDefault();
-	}
-	else if(theForm.chkPeople.checked=true && theForm.chkAir.checked!=true && theForm.chkGenre.checked!=false && 
-			theForm.chkKeyword.checked!=true && theForm.moviePeTe.value==""){
-		alert("영화인을 작성해 주세요.");
-		document.getElementById("moviePeTe").focus();
-		event.preventDefault();
-	}
-	
-	// 키워드
-	else if(theForm.chkKeyword.checked!=false && theForm.chkAir.checked!=true && theForm.chkGenre.checked!=true && 
-			theForm.chkPeople.checked!=true && theForm.autoComplete.value==""){
-		alert("키워드를 작성해 주세요.");
-		document.getElementById("autoComplete").focus();
-		event.preventDefault();
-	} 
-	
-	genInputValue(); // 유효성 검사 후 입력값 종합
-}
 
-// 입력값(체크 없으면 null, 있으면 값)
-function genInputValue(){
-	var valueByAir 
-	var valueByGen = $('#genrechoose').val();
-	var valueByPe = $('#moviePeTe').val();
-	var valueByKey = $('#autoComplete').val();
+	let message = "";
 	
-	// 현재 상영작
-	if($("input:checkbox[id='chkAir']").prop("checked")){
-		valueByAir = "true";
-	} else{valueByAir = null;}
-	
-	// 장르(genreId로 나옴)
-	if($("input:checkbox[id='chkGenre']").prop("checked")){
-		valueByGen = $('#genrechoose').val();
+	let genreVal = rangeSelectForm.chkGenre.checked && rangeSelectForm.genreId.value == -1;
+	let personVal = rangeSelectForm.chkPerson.checked && rangeSelectForm.personName.value == "";
+	let keywordVal = rangeSelectForm.chkKeyword.checked && rangeSelectForm.movieKeyword.value == "";
+	if(genreVal){
+		message+="장르를 선택해주세요";
+	}
+	if(personVal){
+		genreVal?message+="\n영화인을 입력해주세요":message+="영화인을 입력해주세요";
+	}
+	if(keywordVal){
+		personVal||genreVal?message+="\n키워드를 입력해주세요":message+="키워드를 입력해주세요";
+	}
+
+	if(message!=""){
+		alert(message);
+		return;
 	}
 	
-	// 영화인
-	if(moviePeTe.value==""){
-		valueByPe = null;
-	}
-	
-	// 키워드
-	if(autoComplete.value==""){
-		valueByKey = null;
-	}
-	
-	// 입력값 나오는지 체크
-	alert('상영중=' + valueByAir + "\n" + '장르=' + valueByGen + "\n" + 
-			'영화인=' + valueByPe + "\n" + '영화 키워드=' + valueByKey);
-		
-			
-}
+	rangeSelectForm.submit();
+})
 
 
 

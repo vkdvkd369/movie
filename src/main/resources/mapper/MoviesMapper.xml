@@ -24,6 +24,7 @@
 		<result column="personName" property="personName"/>
 		<result column="personPosition" property="personPosition"/>
 	</resultMap>
+
 	
 
 	<select id="selectAllMovies" resultType="Movie">
@@ -38,19 +39,23 @@
 			
 			<trim prefix="WHERE" prefixOverrides="AND">
 				<if test='movieTitle != null'>
-					AND m.movieTitle like CONCAT('%',#{movieTitle},'%')
+					AND m.movieTitle like CONCAT('%',#{movieTitle, jdbcType=VARCHAR},'%')
 				</if>
 				<if test='personName != null'>
-					AND mpjp.personName=#{personName}
+					AND mpjp.personName=#{personName, jdbcType=VARCHAR}
 				</if>
 				<if test='genreId != null'>
-					AND mgjg.genreId=#{genreId}
+					AND mgjg.genreId=#{genreId, jdbcType=INTEGER}
 				</if>
 			</trim>
 	</select>
 	
 	<select id="selectAllGenres" resultMap="GenreMap">
 		SELECT * FROM genre
+	</select>
+
+	<select id="selectGenreIdByName" resultType="int">
+		SELECT genreId FROM genre WHERE genreName=#{genreName}
 	</select>
 
 	<select id="selectMovieStoryById" resultType="string">
@@ -72,12 +77,35 @@
 			LEFT JOIN (SELECT mp.movieId, p.personId, p.personName, p.personPosition FROM moviePeople mp JOIN people p ON mp.personId=p.personId) mpjp ON m.movieId=mpjp.movieId
 			WHERE m.movieId=#{movieId};
 	</select>
-	
-	<select id="selectMovieByMoviecode" resultMap = "MovieMap">
-		SELECT m.*, mP.personId, p.personName, p.personPosition
-			FROM movies m
-			LEFT JOIN moviePeople mP on m.movieId = mP.movieId
-			LEFT JOIN people p on mP.personId = p.personId
-			WHERE m.movieCode = #{movieCode}
+	<select id="selectMoviesIdByCodeList" resultType="Map" parameterType="list">
+		SELECT movieCode, movieId FROM movies
+			WHERE movieCode in
+			<foreach collection="movieCodeList" item="movieCode" separator="," open="(" close=")">
+				#{movieCode}
+			</foreach>
 	</select>
+
+	<select id="selectPersonByName" resultType="Person">
+		SELECT * FROM people WHERE personName=#{personName}
+	</select>
+
+	<insert id="insertMovie" parameterType="Movie">
+		INSERT IGNORE INTO movies(movieTitle, movieYear, movieCode, movieStory)
+			VALUES(#{movieTitle}, #{movieYear}, #{movieCode}, #{movieStory})
+	</insert>
+
+	<insert id="insertPerson" parameterType="Person">
+		INSERT IGNORE INTO people(personName, personPosition)
+			VALUES(#{personName}, #{personPosition})
+	</insert>
+
+	<insert id="insertMovieGenre">
+		INSERT IGNORE INTO movieGenre(movieId, genreId)
+			VALUES(#{movieId}, #{genreId})
+	</insert>
+
+	<insert id="insertMoviePerson">
+		INSERT IGNORE INTO moviePeople(movieId, personId)
+			VALUES(#{movieId}, #{personId})
+	</insert>
 </mapper>
