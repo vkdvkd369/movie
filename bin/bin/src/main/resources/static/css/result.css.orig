@@ -1,0 +1,95 @@
+@charset "UTF-8";
+* {margin:0;padding:0;}
+body{background:url('/images/moviebg.png')}
+.slidebox input[id*="slide"] {display:none;} 
+
+.slidebox {max-width:1000px;width:100%;margin:0 auto;text-align:center;}
+
+.slidebox .slidewrap {max-width:400px;margin:0 auto;}
+.slidebox .slidelist {white-space:nowrap;font-size:0;overflow:hidden;}
+.slidebox .slidelist > li {display:inline-block;vertical-align:middle;width:100%;transition:all .5s;}
+.slidebox .slidelist > li > a {display:block;position:relative;}
+.slidebox .slidelist > li > a img {max-width:100%; }
+.slidebox .slidelist label {position:absolute;z-index:10;top:50%;transform:translateY(-50%);padding:50px;cursor:pointer;}
+
+/* 글자 나타나는 위치 */
+.slidebox .slidelist .textbox {position:absolute;z-index:1;top:30%;left:50%;
+transform:translate(-50%,-50%);line-height:1.6;text-align:center;}
+.slidebox .slidelist .textbox h3 {font-size:36px;color:#fff;;transform:translateY(30px);transition:all .5s;}
+.slidebox .slidelist .textbox p {font-size:16px;color:#fff;opacity:0;transform:translateY(30px);transition:all .5s;}
+
+/* input에 체크되면 슬라이드 효과 */
+.slidebox input[id="slide01"]:checked ~ .slidewrap .slidelist > li {transform:translateX(0%);}
+.slidebox input[id="slide02"]:checked ~ .slidewrap .slidelist > li {transform:translateX(-100%);}
+.slidebox input[id="slide03"]:checked ~ .slidewrap .slidelist > li {transform:translateX(-200%);}
+.slidebox input[id="slide04"]:checked ~ .slidewrap .slidelist > li {transform:translateX(-300%);}
+.slidebox input[id="slide05"]:checked ~ .slidewrap .slidelist > li {transform:translateX(-400%);}
+
+/* input에 체크되면 텍스트 효과 */
+.slidebox input[id="slide01"]:checked ~ .slidewrap li:nth-child(1) .textbox h3 {opacity:1;transform:translateY(0);transition-delay:.2s;}
+.slidebox input[id="slide01"]:checked ~ .slidewrap li:nth-child(1) .textbox p {opacity:1;transform:translateY(0);transition-delay:.4s;}
+.slidebox input[id="slide02"]:checked ~ .slidewrap li:nth-child(2) .textbox h3 {opacity:1;transform:translateY(0);transition-delay:.2s;}
+.slidebox input[id="slide02"]:checked ~ .slidewrap li:nth-child(2) .textbox p {opacity:1;transform:translateY(0);transition-delay:.4s;}
+.slidebox input[id="slide03"]:checked ~ .slidewrap li:nth-child(3) .textbox h3 {opacity:1;transform:translateY(0);transition-delay:.2s;}
+.slidebox input[id="slide03"]:checked ~ .slidewrap li:nth-child(3) .textbox p {opacity:1;transform:translateY(0);transition-delay:.4s;}
+.slidebox input[id="slide04"]:checked ~ .slidewrap li:nth-child(4) .textbox h3 {opacity:1;transform:translateY(0);transition-delay:.2s;}
+.slidebox input[id="slide04"]:checked ~ .slidewrap li:nth-child(4) .textbox p {opacity:1;transform:translateY(0);transition-delay:.4s;}
+.slidebox input[id="slide05"]:checked ~ .slidewrap li:nth-child(5) .textbox h3 {opacity:1;transform:translateY(0);transition-delay:.2s;}
+.slidebox input[id="slide05"]:checked ~ .slidewrap li:nth-child(5) .textbox p {opacity:1;transform:translateY(0);transition-delay:.4s;}
+
+
+/* 페이징 */
+.paginglist {text-align:center;padding:20px;}
+.paginglist > li {display:inline-block;vertical-align:middle;}
+.paginglist > li > label {display:block;padding:4px 15px;border-radius:30px;background:#ccc;margin:10px 10px;cursor:pointer;}
+.slidebox input[id="slide01"]:checked ~ .slidewrap .paginglist > li:nth-child(1) > label {background:#999;}
+.slidebox input[id="slide02"]:checked ~ .slidewrap .paginglist > li:nth-child(2) > label {background:#999;} 
+.slidebox input[id="slide03"]:checked ~ .slidewrap .paginglist > li:nth-child(3) > label {background:#999;}
+.slidebox input[id="slide04"]:checked ~ .slidewrap .paginglist > li:nth-child(4) > label {background:#999;}
+.slidebox input[id="slide05"]:checked ~ .slidewrap .paginglist > li:nth-child(5) > label {background:#999;}
+
+
+@keyframes slide01 {
+	0% {left:0%;}
+	23% {left:0%;}
+	25% {left:-100%;}
+	48% {left:-100%;}
+	50% {left:-200%;}
+	73% {left:-200%;}
+	75% {left:-300%;}
+	98% {left:-300%;}
+	100% {left:0%;}
+}
+@keyframes slide02 {
+	0% {left:0%;}
+	23% {left:0%;}
+	25% {left:-100%;}
+	48% {left:-100%;}
+	50% {left:-200%;}
+	73% {left:-200%;}
+	75% {left:100%;}
+	98% {left:100%;}
+	100% {left:0%;}
+}
+@keyframes slide03 {
+	0% {left:0%;}
+	23% {left:0%;}
+	25% {left:-100%;}
+	48% {left:-100%;}
+	50% {left:200%;}
+	73% {left:200%;}
+	75% {left:100%;}
+	98% {left:100%;}
+	100% {left:0%;}
+}
+@keyframes slide04 {
+	0% {left:0%;}
+	23% {left:0%;}
+	25% {left:300%;}
+	48% {left:300%;}
+	50% {left:200%;}
+	73% {left:200%;}
+	75% {left:100%;}
+	98% {left:100%;}
+	100% {left:0%;}
+}

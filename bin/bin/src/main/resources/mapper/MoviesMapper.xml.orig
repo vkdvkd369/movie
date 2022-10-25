@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.acorn.recommovie.mapper.MoviesMapper">
+	<resultMap type="Movie" id="MovieMap">
+		<id column="movieId" property="movieId"/>
+		<result column="movieTitle" property="movieTitle"/>
+		<result column="movieYear" property="movieYear"/>
+		<result column="movieCode" property="movieCode"/>
+		<result column="movieStory" property="movieStory"/>
+		
+		<collection property="genres" javaType="java.util.ArrayList" resultMap="GenreMap"/>
+		<collection property="people" javaType="java.util.ArrayList" resultMap="PersonMap"/>
+	</resultMap>
+	
+
+	<resultMap type="Genre" id="GenreMap">
+		<id column="genreId" property="genreId"/>
+		<result column="genreName" property="genreName"/>
+	</resultMap>
+	
+	<resultMap type="Person" id="PersonMap">
+		<id column="personId" property="personId"/>
+		<result column="personName" property="personName"/>
+		<result column="personPosition" property="personPosition"/>
+	</resultMap>
+	
+
+	<select id="selectAllMovie" resultType="Movie">
+		SELECT * FROM movies
+	</select>
+	
+	<select id="selectMovieByTitle" resultMap="MovieMap">
+		SELECT m.*, mgjg.genreId, mgjg.genreName, mpjp.personId, mpjp.personName, mpjp.personPosition
+			FROM movies m
+			JOIN (SELECT mg.movieId, g.genreId, g.genreName FROM movieGenre mg JOIN genre g ON mg.genreId=g.genreId) mgjg ON m.movieId=mgjg.movieId
+			JOIN (SELECT mp.movieId, p.personId, p.personName, p.personPosition FROM moviePeople mp JOIN people p ON mp.personId=p.personId) mpjp ON m.movieId=mpjp.movieId
+			WHERE m.movieTitle=#{movieTitle};
+	</select>
+	
+	<select id="selectAllGenre" resultMap="GenreMap">
+		SELECT * FROM genre
+	</select>
+	
+</mapper>

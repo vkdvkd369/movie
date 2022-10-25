@@ -16,7 +16,11 @@
     width: 100%; height: 50px; z-index: 999999; 
     background-color: #292A2D;}
     
+<<<<<<< HEAD
+    img{width: 2%; position: absolute; top: 10px; left: 30px; }
+=======
     .logo{width: 2%; position: absolute; top: 10px; left: 30px; }
+>>>>>>> b180af7e0409ba9951440722d21639cc9a97a1ab
     
 	#gnb{position: absolute; left:60px;}
 	#gnb li{
