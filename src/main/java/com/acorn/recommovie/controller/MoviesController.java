@@ -190,10 +190,13 @@ public class MoviesController {
 	@PostMapping("similarResult.do")
 	public String similarAnalysis(/* @RequestParam int movieId, */ Model model){
 		//test mapping
-		int movieId = 16995;
-
+		int movieId = 25401;
+		
+		
 		String movieStory = moviesMapper.selectMovieStoryById(movieId);
 		System.out.println(movieStory);
+		
+
 		RestTemplate restTemplate = new RestTemplate();
 		String apiURL ="http://localhost:8081/similar/predict";
 		HashMap<String,Object> request = new HashMap<>();
@@ -210,7 +213,14 @@ public class MoviesController {
 			Movie movie = moviesMapper.selectMovieByTitleEqual(entry.getValue().get("title").toString());
 			sendsub.put("movie", movie);
 			sendsub.put("score", entry.getValue().get("score"));
-			sendsub.put("thumbURL", "https://movie.naver.com/movie/bi/mi/photoViewPopup.naver?movieCode="+movie.getMovieCode());
+			
+			String moviePageURL = "https://movie.naver.com/movie/bi/mi/basic.naver?code="+Integer.toString(movie.getMovieCode());
+			Document page = null;
+			try {page = Jsoup.connect(moviePageURL).get();} catch (IOException e) {e.printStackTrace();}
+			
+			Elements thumbImg = page.select(".poster > a > img");
+			String thumbURL=thumbImg.attr("src");
+			sendsub.put("thumbURL", thumbURL);
 			send.put(entry.getKey(), sendsub);
 		}
 		
