@@ -25,4 +25,11 @@ public class Movie {
 	private ArrayList<Genre> genres;
 	private ArrayList<Person> people;
 	private String movieStory;
+
+	public void setGenres(ArrayList<Genre> genres) {
+		this.genres = genres;
+	}
+	public void setPeople(ArrayList<Person> people) {
+		this.people = people;
+	}
 }

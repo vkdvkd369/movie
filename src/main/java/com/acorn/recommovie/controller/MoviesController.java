@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import com.google.gson.Gson;
+
+import org.apache.ibatis.session.SqlSessionException;
 import org.jsoup.*;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -13,6 +15,7 @@ import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.RestTemplate;
 import com.acorn.recommovie.dto.Genre;
 import com.acorn.recommovie.dto.Movie;
+import com.acorn.recommovie.dto.Person;
 import com.acorn.recommovie.mapper.MoviesMapper;
 import java.io.FileWriter;
 import java.io.FileReader;
@@ -32,7 +36,96 @@ public class MoviesController {
 	@Autowired
 	private MoviesMapper moviesMapper;
 	
-	
+	@Transactional
+	@GetMapping("UpdateOnAirMovies")
+	public String updateOnAirMovies(){
+		Document airpage=null;
+		try {
+			airpage=Jsoup.connect("https://movie.naver.com/movie/running/current.naver").get();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		Elements airingList = airpage.select("ul.lst_detail_t1 > li > div > a");
+		List<Integer> airingCodes = new ArrayList<>();
+		List<Integer> havetoUpdateCodes = new ArrayList<>();
+		for(Element e : airingList){
+			airingCodes.add(Integer.parseInt(e.attr("href").split("=")[1]));
+		}
+		Map<Integer,Integer> movieCodeId = moviesMapper.selectMoviesIdByCodeList(airingCodes);
+		for(Integer code : airingCodes){
+			if(movieCodeId.get(code)==null){
+				havetoUpdateCodes.add(code);
+			}
+		}
+		if(havetoUpdateCodes.size()>0){
+			List<Movie> havetoUpdateMovies = new ArrayList<Movie>();
+			for(Integer code : havetoUpdateCodes){
+				Movie movie = new Movie();
+				Document moviepage = null;
+				try {
+					moviepage=Jsoup.connect("https://movie.naver.com/movie/bi/mi/basic.naver?code="+code).get();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				if(moviepage != null){
+					String movieTitle = moviepage.selectFirst("h3.h_movie a").text();
+					String movieStory = moviepage.selectFirst("div.story_area p.con_tx").text();
+					String moviePoster = moviepage.selectFirst("div.poster img").attr("src");
+					ArrayList<Genre> movieGenre = new ArrayList<Genre>();
+					for(Element e : moviepage.select("dl.info_spec dd:nth-child(2) a")){
+						for(Genre g : moviesMapper.selectAllGenres()){
+							if(e.text().equals(g.getGenreName())){
+								movieGenre.add(g);
+							}
+						}
+					}
+
+					ArrayList<Person> moviePeople = new ArrayList<Person>();
+					for(Element e : moviepage.select("dl.info_spec dd:nth-child(6) a")){
+						Person person = new Person();
+						person.setPersonName(e.text());
+						moviePeople.add(person);
+					}
+					for(Element e : moviepage.select("dl.info_spec dd:nth-child(4) a")){
+						Person person = new Person();
+						person.setPersonName(e.text());
+						moviePeople.add(person);
+					}
+
+					movie.setMovieCode(code);
+					movie.setMovieTitle(movieTitle);
+					movie.setMovieStory(movieStory);
+					movie.setPeople(moviePeople);
+					movie.setGenres(movieGenre);
+					havetoUpdateMovies.add(movie);
+				}			
+			}		
+			
+			updateMoviesToDb(havetoUpdateMovies);
+			System.out.println("업데이트 완료");
+			System.out.println("업데이트된 영화 수 : "+havetoUpdateMovies.size());
+			System.out.println("업데이트된 영화 목록 : "+havetoUpdateMovies);
+		}
+		return "redirect:/";
+
+		
+	}
+
+	@Transactional
+	public void updateMoviesToDb(List<Movie> movies) throws SqlSessionException{
+		for(Movie movie : movies){
+			moviesMapper.insertMovie(movie);
+			for(Person person : movie.getPeople()){
+				moviesMapper.insertPerson(person);
+				moviesMapper.insertMoviePerson(movie.getMovieId(), moviesMapper.selectPersonByName(person.getPersonName()).getPersonId());
+			}
+			for(Genre genre : movie.getGenres()){
+				moviesMapper.insertMovieGenre(movie.getMovieId(), moviesMapper.selectGenreIdByName(genre.getGenreName()));
+
+			}
+		}
+	}
 	
 	
 	@GetMapping("rangeSelect")
@@ -49,12 +142,19 @@ public class MoviesController {
 	}
 	
 	@PostMapping("rangeSelect.do")
-	public String rangeSelect(@RequestParam(required = false) String movie_keyword,
-			@RequestParam(required = false) String personName, @RequestParam(required = false) int genreId, Model model) {
-		System.out.println(movie_keyword+"\n"+ personName +"\n"+ String.valueOf(genreId));
+	public String rangeSelect(
+			@RequestParam(required = false) boolean chkAir, 
+			@RequestParam(required = false) String movieKeyword,
+			@RequestParam(required = false) String personName,
+			@RequestParam(required = false) String genreId,
+			Model model) {
+		System.out.println(chkAir+"\n"+movieKeyword+"\n"+ personName +"\n"+ Integer.parseInt(genreId));
+
+		Document airpage = null;
+		
 		List<Movie> movies = null;
 		try {
-			movies = moviesMapper.selectMovies(movie_keyword, personName, (Integer)genreId);
+			movies = moviesMapper.selectMovies(movieKeyword, personName, Integer.parseInt(genreId));
 			
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -65,10 +165,10 @@ public class MoviesController {
 		HashMap<Integer,String> thumbURLs = new HashMap<Integer,String>(); 
 	
 		for (Movie movie : movies) {
-			String moviePageURL = "https://movie.naver.com/movie/bi/mi/basic.naver?code="+Integer.toString(movie.getMovieCode());
+			String moviepageURL = "https://movie.naver.com/movie/bi/mi/basic.naver?code="+Integer.toString(movie.getMovieCode());
 			
 			Document page = null;
-			try {page = Jsoup.connect(moviePageURL).get();} catch (IOException e) {e.printStackTrace();}
+			try {page = Jsoup.connect(moviepageURL).get();} catch (IOException e) {e.printStackTrace();}
 			
 			Elements thumbImg = page.select(".poster > a > img");
 			String thumbURL=thumbImg.attr("src");
@@ -155,9 +255,9 @@ public class MoviesController {
 					send.put("movieTitle", movie.getMovieTitle());
 					send.put("positiveRatio",(Double)(li.get(1)));
 
-					String moviePageURL = "https://movie.naver.com/movie/bi/mi/basic.naver?code="+Integer.toString(movie.getMovieCode());
+					String moviepageURL = "https://movie.naver.com/movie/bi/mi/basic.naver?code="+Integer.toString(movie.getMovieCode());
 					Document page = null;
-					try {page = Jsoup.connect(moviePageURL).get();} catch (IOException e) {e.printStackTrace();}
+					try {page = Jsoup.connect(moviepageURL).get();} catch (IOException e) {e.printStackTrace();}
 					
 					Elements thumbImg = page.select(".poster > a > img");
 					String thumbURL=thumbImg.attr("src");
