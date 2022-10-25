@@ -146,15 +146,15 @@ public class MoviesController {
 			@RequestParam(required = false) boolean chkAir, 
 			@RequestParam(required = false) String movieKeyword,
 			@RequestParam(required = false) String personName,
-			@RequestParam(required = false) String genreId,
+			@RequestParam(required = false) Integer genreId,
 			Model model) {
-		System.out.println(chkAir+"\n"+movieKeyword+"\n"+ personName +"\n"+ Integer.parseInt(genreId));
+		System.out.println(chkAir+"\n"+movieKeyword+"\n"+ personName +"\n"+ String.valueOf(genreId));
 
 		Document airpage = null;
 		
 		List<Movie> movies = null;
 		try {
-			movies = moviesMapper.selectMovies(movieKeyword, personName, Integer.parseInt(genreId));
+			movies = moviesMapper.selectMovies(movieKeyword, personName, genreId);
 			
 		}catch (Exception e) {
 			e.printStackTrace();

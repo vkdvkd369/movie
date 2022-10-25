@@ -39,13 +39,13 @@
 			
 			<trim prefix="WHERE" prefixOverrides="AND">
 				<if test='movieTitle != null'>
-					AND m.movieTitle like CONCAT('%',#{movieTitle},'%')
+					AND m.movieTitle like CONCAT('%',#{movieTitle, jdbcType=VARCHAR},'%')
 				</if>
 				<if test='personName != null'>
-					AND mpjp.personName=#{personName}
+					AND mpjp.personName=#{personName, jdbcType=VARCHAR}
 				</if>
 				<if test='genreId != null'>
-					AND mgjg.genreId=#{genreId}
+					AND mgjg.genreId=#{genreId, jdbcType=INTEGER}
 				</if>
 			</trim>
 	</select>
