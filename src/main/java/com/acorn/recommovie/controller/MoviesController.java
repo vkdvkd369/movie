@@ -18,6 +18,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -285,10 +286,10 @@ public class MoviesController {
 	public void result() {}
 
 	@GetMapping("similarResult")
-	public void similarResult(){}
+	public void similarResult() {}
 
 	@PostMapping("similarResult.do")
-	public String similarAnalysis(/* @RequestParam int movieId, */ Model model){
+	public String similarAnalysis( /* @RequestParam int movieId, */ Model model){
 		//test mapping
 		int movieId = 25401;
 		
@@ -302,7 +303,6 @@ public class MoviesController {
 		HashMap<String,Object> request = new HashMap<>();
 		request.put("movieStory",movieStory);
 		ResponseEntity<String> response = restTemplate.postForEntity(apiURL, request, String.class);
-
 		
 		Gson gson = new Gson();
 		Map<String, Map<String,Object>> resultMap = gson.fromJson(response.getBody(), Map.class);
@@ -310,9 +310,13 @@ public class MoviesController {
 		HashMap<String, Map<String,Object>> send = new HashMap<>();
 		for(Map.Entry<String,Map<String, Object>> entry : resultMap.entrySet()){
 			HashMap<String,Object> sendsub = new HashMap<>();
-			Movie movie = moviesMapper.selectMovieByTitleEqual(entry.getValue().get("title").toString());
+			Double Mid = (Double) entry.getValue().get("id");
+			int id = Mid.intValue();
+			Movie movie = moviesMapper.selectMovieByMId(id);
 			sendsub.put("movie", movie);
 			sendsub.put("score", entry.getValue().get("score"));
+			List<String> movieGenres = moviesMapper.selectGenreNameById(id);
+			sendsub.put("genres",movieGenres);
 			
 			String moviePageURL = "https://movie.naver.com/movie/bi/mi/basic.naver?code="+Integer.toString(movie.getMovieCode());
 			Document page = null;
@@ -325,8 +329,10 @@ public class MoviesController {
 		}
 		
 		model.addAttribute("send", send);
+		System.out.println(send);
 		// send 형식: { "index" : {"score":0.918301105160158, "movie": moviedto } }
 		return "recommend/similarResult";
+		
 	}
 
 }

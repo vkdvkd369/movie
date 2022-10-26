@@ -79,12 +79,13 @@ def predict_similar():
     movie_scores = [idx[1] for idx in sim_scores]
     # 영화 인덱스 -> 타이틀
     movie_name = []
+    movie_id = []
     for i in movie_indices:
         movie_name.append(index_to_title[i])
-
+        movie_id.append(i+1)
     send = {}
-    for i, mn, ms in zip(range(len(movie_name)), movie_name, movie_scores):
-        send[i] = {"title": mn, "score": ms}
+    for i, mn, ms, mi in zip(range(len(movie_name)), movie_name, movie_scores, movie_id):
+        send[i] = {"title": mn, "score": ms, "id": mi}
 
     return send
 

@@ -10,13 +10,14 @@ body{background:url('/images/moviebg.png')}
 .slidebox .slidelist > li {display:inline-block;vertical-align:middle;width:100%;transition:all .5s;}
 .slidebox .slidelist > li > a {display:block;position:relative;}
 .slidebox .slidelist > li > a img {width:100%; }
+.slidebox .slidelist > li > form input {width:100%; }
 .slidebox .slidelist label {position:absolute;z-index:10;top:50%;transform:translateY(-50%);padding:50px;cursor:pointer;}
 
 /* 글자 나타나는 위치 */
 .slidebox .slidelist .textbox {position:absolute;z-index:1;top:30%;left:50%;
 transform:translate(-50%,-50%);line-height:1.6;text-align:center;}
-.slidebox .slidelist .textbox h3 {font-size:36px;color:#fff;;transform:translateY(30px);transition:all .5s;}
-.slidebox .slidelist .textbox p {font-size:16px;color:#fff;opacity:0;transform:translateY(30px);transition:all .5s;}
+.slidebox .slidelist .textbox h3 {font-size:32px;color:#fff;;transform:translateY(30px);transition:all .5s;}
+.slidebox .slidelist .textbox p {font-size:20px;color:#fff;opacity:0;transform:translateY(30px);transition:all .5s;}
 
 /* input에 체크되면 슬라이드 효과 */
 .slidebox input[id="slide01"]:checked ~ .slidewrap .slidelist > li {transform:translateX(0%);}
@@ -93,3 +94,4 @@ transform:translate(-50%,-50%);line-height:1.6;text-align:center;}
 	98% {left:100%;}
 	100% {left:0%;}
 }
+
