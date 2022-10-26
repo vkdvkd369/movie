@@ -303,20 +303,23 @@ public class MoviesController {
 		HashMap<String,Object> request = new HashMap<>();
 		request.put("movieStory",movieStory);
 		ResponseEntity<String> response = restTemplate.postForEntity(apiURL, request, String.class);
-		
+
+
+
 		Gson gson = new Gson();
 		Map<String, Map<String,Object>> resultMap = gson.fromJson(response.getBody(), Map.class);
 		System.out.println(resultMap);
 		HashMap<String, Map<String,Object>> send = new HashMap<>();
 		for(Map.Entry<String,Map<String, Object>> entry : resultMap.entrySet()){
 			HashMap<String,Object> sendsub = new HashMap<>();
-			Double Mid = (Double) entry.getValue().get("id");
-			int id = Mid.intValue();
+			Double M_id = (Double) entry.getValue().get("id");
+			int id = M_id.intValue();
 			Movie movie = moviesMapper.selectMovieByMId(id);
 			sendsub.put("movie", movie);
 			sendsub.put("score", entry.getValue().get("score"));
-			List<String> movieGenres = moviesMapper.selectGenreNameById(id);
-			sendsub.put("genres",movieGenres);
+			List<String> movieGenres=moviesMapper.selectGenreNameById(id);
+			sendsub.put("genres", movieGenres);
+
 			
 			String moviePageURL = "https://movie.naver.com/movie/bi/mi/basic.naver?code="+Integer.toString(movie.getMovieCode());
 			Document page = null;

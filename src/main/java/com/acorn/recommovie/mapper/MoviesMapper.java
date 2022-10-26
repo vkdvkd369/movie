@@ -21,10 +21,12 @@ public interface MoviesMapper {
 	 Map<Integer,Integer> selectMoviesIdByCodeList(List<Integer> movieCodeList);
 	 Person selectPersonByName(String personName);
 	 
-	 //test용
+	//test용
 	 List<String> selectGenreNameById(int movieId);
 	 Movie selectMovieByMId(int movieId);
 
+
+	 
 	 void insertMovie(Movie movie);
 	 void insertPerson(Person person);
 	 void insertMovieGenre(Integer movieId, Integer genreId);

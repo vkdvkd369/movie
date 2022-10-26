@@ -109,7 +109,7 @@
 			VALUES(#{movieId}, #{personId})
 	</insert>
 	
-	
+
 	<!-- test용 -->
 	<select id ="selectGenreNameById" resultType="String">
 		SELECT g.genreName FROM genre g 
