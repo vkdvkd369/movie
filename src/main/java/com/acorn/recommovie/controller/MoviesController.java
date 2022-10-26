@@ -303,16 +303,20 @@ public class MoviesController {
 		request.put("movieStory",movieStory);
 		ResponseEntity<String> response = restTemplate.postForEntity(apiURL, request, String.class);
 
-		
+
 		Gson gson = new Gson();
 		Map<String, Map<String,Object>> resultMap = gson.fromJson(response.getBody(), Map.class);
 		System.out.println(resultMap);
 		HashMap<String, Map<String,Object>> send = new HashMap<>();
 		for(Map.Entry<String,Map<String, Object>> entry : resultMap.entrySet()){
 			HashMap<String,Object> sendsub = new HashMap<>();
-			Movie movie = moviesMapper.selectMovieByTitleEqual(entry.getValue().get("title").toString());
+			Double M_id = (Double) entry.getValue().get("id");
+			int id = M_id.intValue();
+			Movie movie = moviesMapper.selectMovieByMId(id);
 			sendsub.put("movie", movie);
 			sendsub.put("score", entry.getValue().get("score"));
+			List<String> movieGenres=moviesMapper.selectGenreNameById(id);
+			sendsub.put("genres", movieGenres);
 			
 			String moviePageURL = "https://movie.naver.com/movie/bi/mi/basic.naver?code="+Integer.toString(movie.getMovieCode());
 			Document page = null;
@@ -325,6 +329,7 @@ public class MoviesController {
 		}
 		
 		model.addAttribute("send", send);
+		System.out.println(send);
 		// send 형식: { "index" : {"score":0.918301105160158, "movie": moviedto } }
 		return "recommend/similarResult";
 	}

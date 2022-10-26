@@ -85,7 +85,7 @@ def predict_similar():
         movie_id.append(i+1)
     send = {}
     for i, mn, ms, mi in zip(range(len(movie_name)), movie_name, movie_scores, movie_id):
-        send[i] = {"title": mn, "score": ms, "id": int(mi)}
+        send[i] = {"title": mn, "score": ms, "id": mi}
 
     return send
 
