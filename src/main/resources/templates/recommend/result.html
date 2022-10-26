@@ -6,7 +6,7 @@
 
     <link rel="stylesheet" href="/css/result.css">
     <script src="/js/result.js"></script>
-  
+
 </head>
 <body>
     <script th:inline="javascript">
@@ -43,7 +43,7 @@
                         <a>
                             <div class="textbox">
                                 <h3 th:text="${movie.movieTitle}"></h3>
-                                    <p th:text="${movie?.positiveRatio}"></p>
+                                <p th:text="${movie?.positiveRatio}"></p>
                             </div>
                             <img th:src="${movie.movieThumbUrl}">
                         </a>
